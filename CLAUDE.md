@@ -71,9 +71,10 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
   (Vanilla-JS-Module), IndexedDB, Scanner mit BarcodeDetector bzw. ZXing (lokal unter `vendor/`),
   Produktdaten aus Open Food Facts / Open Beauty Facts / Open Products Facts, Export/Import JSON.
   Aufbau und Datenmodell: siehe README.md.
-- Lokal starten: `python -m http.server 8080 --bind 127.0.0.1`, Tests: `npm test`.
+- Lokal starten: `MyEinkauf-starten.bat` (oder `python -m http.server 8080 --bind 127.0.0.1`), Tests: `npm test`.
+- Online (GitHub Pages, Branch `main`): https://uponseven.github.io/MyEinkauf/ – Repo: https://github.com/uponseven/MyEinkauf (öffentlich). `git push` veröffentlicht Änderungen.
 - Bei geänderter Dateiliste `APP_FILES`/`VERSION` in `sw.js` anpassen, App-Version in `js/app.js`.
 
 ## Nächster Schritt
-- Repository auf GitHub anlegen, GitHub Pages aktivieren, Scanner am Android-Handy testen.
+- Scanner am Android-Handy testen.
 - Danach Phase 2: Märkte aus OpenStreetMap.
