@@ -1,0 +1,1925 @@
+{
+ "city": "Leipzig",
+ "source": "OpenStreetMap-Mitwirkende, ODbL",
+ "query": "[out:json][timeout:60];\narea[\"name\"=\"Leipzig\"][\"boundary\"=\"administrative\"][\"admin_level\"=\"6\"]->.a;\n(nwr[\"shop\"=\"supermarket\"](area.a);nwr[\"shop\"=\"chemist\"](area.a););\nout center tags;",
+ "loadedAt": "2026-10-13T14:23:52.675Z",
+ "markets": [
+  {
+   "id": "node/252441137",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.328844,
+   "lon": 12.34399,
+   "address": "Nonnenstraße 15, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/256721319",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.332007,
+   "lon": 12.411681,
+   "address": "Eilenburger Straße 55, 04317 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su off"
+  },
+  {
+   "id": "node/269418319",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.375762,
+   "lon": 12.359583,
+   "address": "Max-Liebermann-Straße 90F, 04157 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su off"
+  },
+  {
+   "id": "node/301138723",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.304396,
+   "lon": 12.42635,
+   "address": "Bockstraße 1-3, 04289 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; PH closed"
+  },
+  {
+   "id": "node/345278421",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.357007,
+   "lon": 12.426717,
+   "address": "Löbauer Straße 68-70, 04347 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/501578985",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.339873,
+   "lon": 12.377344,
+   "address": "Grimmaische Straße 15, 04109 Leipzig",
+   "openingHours": "Mo-Sa 08:00-21:00"
+  },
+  {
+   "id": "node/639547711",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.345994,
+   "lon": 12.318255,
+   "address": "Georg-Schwarz-Straße 92 - 96, 04179 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su, PH off"
+  },
+  {
+   "id": "node/663244098",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.341519,
+   "lon": 12.360852,
+   "address": "Elsterstraße 51-57, 04109 Leipzig",
+   "openingHours": "Mo-Sa 08:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/878870305",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.363453,
+   "lon": 12.36409,
+   "address": "Elsbethstraße 25, 04155 Leipzig",
+   "openingHours": "Mo-Sa 08:00-21:00"
+  },
+  {
+   "id": "node/1102784571",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.345203,
+   "lon": 12.380147,
+   "address": "Willy-Brandt-Platz 7, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su 12:00-18:00; PH off"
+  },
+  {
+   "id": "node/1518237732",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.401752,
+   "lon": 12.398467,
+   "address": "Handelsstraße, Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; PH off"
+  },
+  {
+   "id": "node/2012022018",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.332574,
+   "lon": 12.378499,
+   "address": "Windmühlenstraße 31, 04107 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/2129894053",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.319522,
+   "lon": 12.291841,
+   "address": "Ludwigsburger Straße 9, 04209 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; PH off"
+  },
+  {
+   "id": "node/3381699376",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.356654,
+   "lon": 12.459359,
+   "address": "Goldsternstraße 58, 04329 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; PH off"
+  },
+  {
+   "id": "node/12382810995",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.33226,
+   "lon": 12.320192,
+   "address": "Lützner Straße 150, 04179 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/12546264638",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.34785,
+   "lon": 12.266368,
+   "address": "",
+   "openingHours": ""
+  },
+  {
+   "id": "node/13071440603",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.345155,
+   "lon": 12.404558,
+   "address": "Konradstraße 27, 04315",
+   "openingHours": "Mo-Sa 08:00-22:00"
+  },
+  {
+   "id": "node/13166065154",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.332568,
+   "lon": 12.39393,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/35783615",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.292724,
+   "lon": 12.39378,
+   "address": "Friederikenstraße 25, 04279 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00"
+  },
+  {
+   "id": "way/39962162",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.317942,
+   "lon": 12.378694,
+   "address": "Arthur-Hoffmann-Straße 113, 04275 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/40905474",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.326177,
+   "lon": 12.371816,
+   "address": "Braustraße 26, 04107 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/77862850",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.35469,
+   "lon": 12.293477,
+   "address": "Heinrich-Heine-Straße 39, 04178 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; PH off"
+  },
+  {
+   "id": "way/82614494",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.306817,
+   "lon": 12.259598,
+   "address": "Straße am See 1, 04207 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; PH off"
+  },
+  {
+   "id": "way/115572130",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.319477,
+   "lon": 12.42473,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-21:00; PH off"
+  },
+  {
+   "id": "way/115787013",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.378111,
+   "lon": 12.41651,
+   "address": "Tauchaer Straße 10, 04357 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00"
+  },
+  {
+   "id": "way/183704190",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.301393,
+   "lon": 12.316808,
+   "address": "Gerhard-Ellrodt-Straße 30, Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/332876354",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.366989,
+   "lon": 12.385184,
+   "address": "Delitzscher Straße 61, 04129 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; PH off"
+  },
+  {
+   "id": "way/405633160",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.342046,
+   "lon": 12.48559,
+   "address": "Hugo-Aurig-Straße 5a, 04319",
+   "openingHours": "Mo-Sa 08:00-20:00"
+  },
+  {
+   "id": "way/456940999",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.374897,
+   "lon": 12.321094,
+   "address": "Georg-Schumann-Straße 363, 04159 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/496751465",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.34588,
+   "lon": 12.444822,
+   "address": "Riesaer Straße 30, 04328 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "relation/12507586",
+   "chain": "aldi",
+   "name": "Aldi",
+   "lat": 51.321248,
+   "lon": 12.322737,
+   "address": "Klingenstraße 38a, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/670232663",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.331428,
+   "lon": 12.380704,
+   "address": "Windmühlenstraße 37, 04107 Leipzig",
+   "openingHours": "Mo-Fr 08:30-20:00; Sa 08:30-18:00"
+  },
+  {
+   "id": "node/696589361",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.337408,
+   "lon": 12.334449,
+   "address": "Lindenauer Markt 12, 04177 Leipzig",
+   "openingHours": "Mo-Fr 08:00-20:00; Sa 09:00-20:00"
+  },
+  {
+   "id": "node/1276153880",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.344276,
+   "lon": 12.382743,
+   "address": "Willy-Brandt-Platz 7, 04109 Leipzig",
+   "openingHours": "Mo-Sa 08:00-21:00; Su 09:30-20:00; PH 10:00-20:00"
+  },
+  {
+   "id": "node/1826169438",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.336771,
+   "lon": 12.374905,
+   "address": "Petersstraße 50, 04109 Leipzig",
+   "openingHours": "Mo-Sa 08:30-20:00"
+  },
+  {
+   "id": "node/2128950526",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.343669,
+   "lon": 12.376138,
+   "address": "Brühl 1, 04109 Leipzig",
+   "openingHours": "Mo-Sa 09:30-20:00"
+  },
+  {
+   "id": "node/2791970402",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.401803,
+   "lon": 12.398308,
+   "address": "Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00"
+  },
+  {
+   "id": "node/4007606430",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.346594,
+   "lon": 12.475947,
+   "address": "Paunsdorfer Allee 1, 04329 Leipzig",
+   "openingHours": "Mo-Sa 09:30-20:00"
+  },
+  {
+   "id": "node/4225601054",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.323814,
+   "lon": 12.331492,
+   "address": "Wachsmuthstraße 3, 04229 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/4485513797",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.342439,
+   "lon": 12.373182,
+   "address": "Hainstraße 21, 04109 Leipzig",
+   "openingHours": "Mo-Sa 09:00-20:00; 2026 Sep 09: off \"Renovierung\""
+  },
+  {
+   "id": "node/6416772500",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.318993,
+   "lon": 12.288582,
+   "address": "Ludwigsburger Straße, Leipzig",
+   "openingHours": "Mo-Sa 09:00-20:00"
+  },
+  {
+   "id": "node/7941384933",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.37815,
+   "lon": 12.30394,
+   "address": "",
+   "openingHours": "Mo-Sa 08:00-20:00"
+  },
+  {
+   "id": "way/28143817",
+   "chain": "dm",
+   "name": "dm",
+   "lat": 51.339492,
+   "lon": 12.37834,
+   "address": "Grimmaische Straße 14, 04109 Leipzig",
+   "openingHours": "Mo-Sa 09:00-20:00, Su off"
+  },
+  {
+   "id": "node/14140690115",
+   "chain": "edeka",
+   "name": "Edeka",
+   "lat": 51.345085,
+   "lon": 12.395555,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/239751729",
+   "chain": "edeka",
+   "name": "Edeka",
+   "lat": 51.392652,
+   "lon": 12.376786,
+   "address": "Messe-Allee 25, 04158 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/269418317",
+   "chain": "edeka",
+   "name": "EDEKA",
+   "lat": 51.375801,
+   "lon": 12.359827,
+   "address": "Landsberger Straße 81, 04157 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/1315463668",
+   "chain": "edeka",
+   "name": "EDEKA",
+   "lat": 51.329558,
+   "lon": 12.33617,
+   "address": "Zschochersche Straße 48, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Fr 07:00-21:00"
+  },
+  {
+   "id": "node/6531977967",
+   "chain": "edeka",
+   "name": "EDEKA",
+   "lat": 51.359989,
+   "lon": 12.283656,
+   "address": "Pestalozzistraße 72, 04178 Leipzig",
+   "openingHours": "Mo-Sa 06:55-20:00; Su,PH off"
+  },
+  {
+   "id": "way/1242777296",
+   "chain": "edeka",
+   "name": "EDEKA",
+   "lat": 51.38988,
+   "lon": 12.327477,
+   "address": "Lindenthaler Hauptstraße 81",
+   "openingHours": ""
+  },
+  {
+   "id": "node/254308723",
+   "chain": "edeka",
+   "name": "Edeka \"An der Uniklinik\"",
+   "lat": 51.33399,
+   "lon": 12.38212,
+   "address": "Bauhofstraße 3-5, 04103 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/877182196",
+   "chain": "edeka",
+   "name": "Edeka Rußler",
+   "lat": 51.352285,
+   "lon": 12.423257,
+   "address": "Volksgartenstraße 55, 04347 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/12077236600",
+   "chain": "edeka",
+   "name": "Edeka Schwarm",
+   "lat": 51.338736,
+   "lon": 12.383045,
+   "address": "Grimmaischer Steinweg 5, 04103 Leipzig",
+   "openingHours": "Mo-Fr 07:00-22:00; Sa 09:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/257017801",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.33703,
+   "lon": 12.404294,
+   "address": "Dresdner Straße 78-80, 04317 Leipzig",
+   "openingHours": "Mo-Sa 06:00-22:00"
+  },
+  {
+   "id": "node/293950983",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.303497,
+   "lon": 12.322609,
+   "address": "Anton-Zickmantel-Straße 42, 04249 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/1455070983",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.350647,
+   "lon": 12.476494,
+   "address": "Paunsdorfer Allee 1, 04329 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "way/23174297",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.324036,
+   "lon": 12.276614,
+   "address": "Kiewer Straße 30, 04205 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/30069271",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.373408,
+   "lon": 12.329576,
+   "address": "Georg-Schumann-Straße 290, 04159 Leipzig",
+   "openingHours": "Mo-Sa 06:00-22:00; Su off"
+  },
+  {
+   "id": "way/40803219",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.362562,
+   "lon": 12.362383,
+   "address": "Georg-Schumann-Straße 105-109, 04155 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:30"
+  },
+  {
+   "id": "way/54685262",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.367683,
+   "lon": 12.458231,
+   "address": "Torgauer Straße 279, 04347 Leipzig",
+   "openingHours": "Mo-Sa 06:00-22:00"
+  },
+  {
+   "id": "way/139668798",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.337082,
+   "lon": 12.336234,
+   "address": "Lindenauer Markt 2, 04177 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/256420533",
+   "chain": "kaufland",
+   "name": "Kaufland",
+   "lat": 51.347921,
+   "lon": 12.266965,
+   "address": "Miltitzer 13, 04178 Leipzig",
+   "openingHours": "Mo-Sa 08:00-22:00"
+  },
+  {
+   "id": "node/401494712",
+   "chain": "konsum",
+   "name": "Konsum",
+   "lat": 51.355625,
+   "lon": 12.373292,
+   "address": "Springerstraße 25, 04105 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/4436021034",
+   "chain": "konsum",
+   "name": "Konsum",
+   "lat": 51.340164,
+   "lon": 12.366027,
+   "address": "Käthe-Kollwitz-Straße 16 - 18, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "way/29698296",
+   "chain": "konsum",
+   "name": "Konsum",
+   "lat": 51.368212,
+   "lon": 12.345267,
+   "address": "Dantestraße 17, 04159 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/203620166",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.352524,
+   "lon": 12.459844,
+   "address": "Waldzieststraße 1, 04329 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/314078764",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.324012,
+   "lon": 12.343564,
+   "address": "Könneritzstraße 50, 04229 Leipzig",
+   "openingHours": "Mo-Sa 06:00-22:00"
+  },
+  {
+   "id": "node/319677166",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.372051,
+   "lon": 12.363181,
+   "address": "Viertelsweg 56, 04157 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/365867491",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.326415,
+   "lon": 12.370615,
+   "address": "Dufourstraße 25, 04107 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/386028187",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.300876,
+   "lon": 12.397062,
+   "address": "Johannes-R.-Becher-Straße 2, 04279 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/1710092579",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.330702,
+   "lon": 12.373378,
+   "address": "Karl-Liebknecht-Straße 6b, 04107 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/2320997967",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.342385,
+   "lon": 12.360979,
+   "address": "Jahnallee 10-12, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/2456689776",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.313399,
+   "lon": 12.455171,
+   "address": "Kärrnerstraße, 04288 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; PH off"
+  },
+  {
+   "id": "node/2475205862",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.34938,
+   "lon": 12.352545,
+   "address": "Goyastraße 2, 04105 Leipzig",
+   "openingHours": "Mo-Sa 07:30-22:00"
+  },
+  {
+   "id": "node/2773828895",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.338424,
+   "lon": 12.335147,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/3312064173",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.315309,
+   "lon": 12.308455,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/3470964363",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.335679,
+   "lon": 12.389429,
+   "address": "Prager Straße 12a, 04103 Leipzig",
+   "openingHours": "Mo-Fr 06:00-22:00; Sa 07:00-22:00"
+  },
+  {
+   "id": "node/3617936793",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.361823,
+   "lon": 12.390059,
+   "address": "Theresienstraße 45a-c, 04129 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/4271724130",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.311485,
+   "lon": 12.379366,
+   "address": "Arthur-Hoffmann-Straße 175, 04277 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/4332408838",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.345535,
+   "lon": 12.318769,
+   "address": "Ellernweg 1A, 04179 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/4366628162",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.344468,
+   "lon": 12.417205,
+   "address": "Bautzmannstraße 6-8, 04315 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/5014959476",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.331887,
+   "lon": 12.319119,
+   "address": "Lützner Straße 162, 04179 Leipzig",
+   "openingHours": "Mo-Sa 06:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/5233579328",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.338785,
+   "lon": 12.390416,
+   "address": "Dresdner Straße 9a, 04103 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/5843731114",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.338768,
+   "lon": 12.39032,
+   "address": "Dresdner Straße 9a, 04103 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/6400452787",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.330357,
+   "lon": 12.331399,
+   "address": "Karl-Heine-Straße 87, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/7565339484",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.346487,
+   "lon": 12.394275,
+   "address": "Rosa-Luxemburg-Straße 35, 04315 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/8256859046",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.330249,
+   "lon": 12.39732,
+   "address": "Prager Straße 38-40, 04317 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/10046641410",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.358707,
+   "lon": 12.407721,
+   "address": "Robert-Blum-Straße 21, 04347 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/10295074233",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.306429,
+   "lon": 12.39589,
+   "address": "Zwickauer Straße, 04277 Leipzig",
+   "openingHours": "Mo-Sa 06:00-21:00"
+  },
+  {
+   "id": "way/31584473",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.283111,
+   "lon": 12.311748,
+   "address": "Dieskaustraße 365, 04249 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/31961870",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.349403,
+   "lon": 12.374029,
+   "address": "Nordstraße 41, 04105 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/33071885",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.337528,
+   "lon": 12.416031,
+   "address": "Gregor-Fuchs-Straße 31A, 04318 Leipzig",
+   "openingHours": "Mo-Sa 06:00-20:00; Su,PH closed"
+  },
+  {
+   "id": "way/40134921",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.322848,
+   "lon": 12.365296,
+   "address": "Fockestraße 4, 04275 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su off"
+  },
+  {
+   "id": "way/42445207",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.336044,
+   "lon": 12.359787,
+   "address": "Hauptmannstraße 6, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/60759973",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.330424,
+   "lon": 12.368558,
+   "address": "Grassistraße 13, 04107 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "way/82041987",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.379625,
+   "lon": 12.359496,
+   "address": "Jörgen-Schmidtchen-Weg 2, 04157 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/94501672",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.305023,
+   "lon": 12.382122,
+   "address": "Bornaische Straße 55, 04277 Leipzig",
+   "openingHours": "Mo-Sa 06:00-22:00; Su,PH off"
+  },
+  {
+   "id": "way/98896396",
+   "chain": "konsum",
+   "name": "Konsum Leipzig",
+   "lat": 51.367221,
+   "lon": 12.375245,
+   "address": "Coppistraße 42-44, 04157 Leipzig",
+   "openingHours": "Mo-Sa 06:00-22:00"
+  },
+  {
+   "id": "node/256834969",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.347031,
+   "lon": 12.419439,
+   "address": "Torgauer Straße 72, 04318 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/310218384",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.337626,
+   "lon": 12.374006,
+   "address": "Petersstraße 36/44, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su off"
+  },
+  {
+   "id": "node/11645040041",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.34347,
+   "lon": 12.376565,
+   "address": "Brühl 1, 04109 Leipzig",
+   "openingHours": "Mo-Sa 09:00-21:00"
+  },
+  {
+   "id": "way/19644803",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.346282,
+   "lon": 12.460408,
+   "address": "Riesaer Straße 75, 04328 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/23248703",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.316705,
+   "lon": 12.262611,
+   "address": "Großmiltitzer Straße 45, 04205 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "way/23326744",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.310689,
+   "lon": 12.394897,
+   "address": "Zwickauer Straße 66, 04277 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su off"
+  },
+  {
+   "id": "way/31651766",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.377054,
+   "lon": 12.377903,
+   "address": "Max-Liebermann-Straße 99, 04157 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "way/86985841",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.314132,
+   "lon": 12.369144,
+   "address": "Windscheidstraße 1, 04277 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su off"
+  },
+  {
+   "id": "way/94442640",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.378838,
+   "lon": 12.430869,
+   "address": "Theklaer Straße 150, 04349 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su closed"
+  },
+  {
+   "id": "way/122666714",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.319468,
+   "lon": 12.424181,
+   "address": "Holzhäuser Straße 104, 04299 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/130112721",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.314113,
+   "lon": 12.293449,
+   "address": "Stuttgarter Allee 2, 04209 Leipzig",
+   "openingHours": "Mo-Sa 08:00-21:30"
+  },
+  {
+   "id": "way/162898626",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.338241,
+   "lon": 12.322855,
+   "address": "Hauschildstraße 1, 04177 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/169382955",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.360374,
+   "lon": 12.381582,
+   "address": "Theresienstraße 5, 04129 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "way/181350856",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.325147,
+   "lon": 12.334841,
+   "address": "Zschochersche Straße 79, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/237806180",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.3244,
+   "lon": 12.288885,
+   "address": "Lützner Straße 396, 04205 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "way/239789664",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.30406,
+   "lon": 12.328224,
+   "address": "Dieskaustraße 175, 04249 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "way/1176324765",
+   "chain": "lidl",
+   "name": "Lidl",
+   "lat": 51.290678,
+   "lon": 12.427512,
+   "address": "Margaretha-Rothe-Straße 32, 04289 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/108096218",
+   "chain": "netto",
+   "name": "Netto",
+   "lat": 51.354627,
+   "lon": 12.302116,
+   "address": "Burgauenstraße 2, 04178 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/139612402",
+   "chain": "netto",
+   "name": "Netto",
+   "lat": 51.31749,
+   "lon": 12.267084,
+   "address": "Lützner Straße 540, 04205 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/3587737469",
+   "chain": "netto",
+   "name": "Netto City",
+   "lat": 51.313844,
+   "lon": 12.264148,
+   "address": "Selliner Straße 1B, 04207 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/345277058",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.357015,
+   "lon": 12.425483,
+   "address": "Löbauer Straße 68, 04347 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/361105451",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.335078,
+   "lon": 12.3293,
+   "address": "GutsMuthsstraße 4, 04177 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/412415566",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.339406,
+   "lon": 12.391269,
+   "address": "Inselstraße 4, 04103 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/412416511",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.342537,
+   "lon": 12.408145,
+   "address": "Dornbergerstraße 8, 04315 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/664037350",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.392444,
+   "lon": 12.340129,
+   "address": "Zur Lindenhöhe 1, 04158 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/775914782",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.343853,
+   "lon": 12.366414,
+   "address": "Ranstädter Steinweg 20, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/974418997",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.350941,
+   "lon": 12.407854,
+   "address": "Waldbaurstraße 2, 04347 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/1149629895",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.303688,
+   "lon": 12.269196,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-20:00; Su off"
+  },
+  {
+   "id": "node/7941367868",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.378217,
+   "lon": 12.302936,
+   "address": "Mühlenstraße 2, 04159 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "node/12640921245",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.308403,
+   "lon": 12.376205,
+   "address": "Bornaische Straße 22, 04277 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/24309731",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.318137,
+   "lon": 12.341237,
+   "address": "Rödelstraße 31, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/31512069",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.359331,
+   "lon": 12.429709,
+   "address": "Braunstraße 1a, 04347 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/66668137",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.334399,
+   "lon": 12.305523,
+   "address": "Plautstraße 36, 04179 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/76840118",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.357207,
+   "lon": 12.282823,
+   "address": "Heinrich-Heine-Straße 91, 04178 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; PH,Su off"
+  },
+  {
+   "id": "way/77862815",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.35492,
+   "lon": 12.29263,
+   "address": "Heinrich-Heine-Straße 41, 04178 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; PH off"
+  },
+  {
+   "id": "way/94808449",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.378304,
+   "lon": 12.422511,
+   "address": "Kieler Straße 9-11, 04357 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/96692879",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.339182,
+   "lon": 12.476894,
+   "address": "Diamantstraße 2, 04319 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/134156089",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.324583,
+   "lon": 12.43501,
+   "address": "Sommerfelder Straße 80, 04316 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/136415023",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.363859,
+   "lon": 12.39702,
+   "address": "Theresienstraße 77, 04129 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/137254090",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.306013,
+   "lon": 12.328147,
+   "address": "Hornstraße 2, 04249 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/144337144",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.321493,
+   "lon": 12.37713,
+   "address": "Bernhard-Göring-Straße 81, 04275 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su,PH off"
+  },
+  {
+   "id": "way/152813556",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.376828,
+   "lon": 12.368478,
+   "address": "Max-Liebermann-Straße 61, 04157 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/152932011",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.359744,
+   "lon": 12.385588,
+   "address": "Wittenberger Straße 25, 04129 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/192101063",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.322288,
+   "lon": 12.30378,
+   "address": "Dahlienstraße 20, 04209 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/240822386",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.378462,
+   "lon": 12.432434,
+   "address": "Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "way/323343205",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.315541,
+   "lon": 12.280927,
+   "address": "Breisgaustraße 85, 04209 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00; Su, PH off"
+  },
+  {
+   "id": "way/370540414",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.305737,
+   "lon": 12.465197,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/1034367925",
+   "chain": "netto",
+   "name": "Netto Marken-Discount",
+   "lat": 51.345515,
+   "lon": 12.267264,
+   "address": "Merseburger Straße 255, 04178 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/177223113",
+   "chain": "norma",
+   "name": "Norma",
+   "lat": 51.368881,
+   "lon": 12.338965,
+   "address": "Knopstraße 17, 04159 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/248550909",
+   "chain": "norma",
+   "name": "Norma",
+   "lat": 51.360231,
+   "lon": 12.392966,
+   "address": "Hartzstraße 6, 04129 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; PH,Su off"
+  },
+  {
+   "id": "node/316522813",
+   "chain": "norma",
+   "name": "Norma",
+   "lat": 51.338246,
+   "lon": 12.369226,
+   "address": "Otto-Schill-Straße 10",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/4882880097",
+   "chain": "norma",
+   "name": "Norma",
+   "lat": 51.376734,
+   "lon": 12.39154,
+   "address": "Essener Straße 11, 04129 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/25507887",
+   "chain": "norma",
+   "name": "Norma",
+   "lat": 51.327431,
+   "lon": 12.28941,
+   "address": "Schönauer Straße 240, 04205 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/33923518",
+   "chain": "norma",
+   "name": "Norma",
+   "lat": 51.327746,
+   "lon": 12.442023,
+   "address": "Zweinaundorfer Straße 165, 04316 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/40354665",
+   "chain": "norma",
+   "name": "Norma",
+   "lat": 51.353263,
+   "lon": 12.305784,
+   "address": "Philipp-Reis-Straße 80, 04179 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/123342615",
+   "chain": "norma",
+   "name": "Norma",
+   "lat": 51.325048,
+   "lon": 12.408963,
+   "address": "Stötteritzer Straße 38, 04317 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/996194624",
+   "chain": "norma",
+   "name": "NORMA",
+   "lat": 51.344529,
+   "lon": 12.26646,
+   "address": "Großer Marktweg 8, 04178 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/81398404",
+   "chain": "norma",
+   "name": "NORMA",
+   "lat": 51.38005,
+   "lon": 12.316106,
+   "address": "Am Börnchen 5, 04159 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/96692827",
+   "chain": "norma",
+   "name": "NORMA",
+   "lat": 51.335966,
+   "lon": 12.477864,
+   "address": "Arthur-Winkler-Straße 37, 04319 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00"
+  },
+  {
+   "id": "node/269856068",
+   "chain": "penny",
+   "name": "Penny",
+   "lat": 51.36239,
+   "lon": 12.370628,
+   "address": "Georg-Schumann-Straße 50, 04155 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/3105379034",
+   "chain": "penny",
+   "name": "Penny",
+   "lat": 51.335315,
+   "lon": 12.306029,
+   "address": "Bienerstraße 7, 04179 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/140445320",
+   "chain": "penny",
+   "name": "Penny",
+   "lat": 51.325527,
+   "lon": 12.449678,
+   "address": "Zweinaundorfer Straße 198, 04316 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su, PH off"
+  },
+  {
+   "id": "way/173523574",
+   "chain": "penny",
+   "name": "Penny",
+   "lat": 51.311617,
+   "lon": 12.279295,
+   "address": "Ratzelstraße 166, 04209 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/513608519",
+   "chain": "penny",
+   "name": "Penny",
+   "lat": 51.32391,
+   "lon": 12.332393,
+   "address": "Zschochersche Straße 82, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/639299270",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.348543,
+   "lon": 12.310952,
+   "address": "Georg-Schwarz-Straße 131, 04179 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/1431466507",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.285105,
+   "lon": 12.456439,
+   "address": "Deutsche Einheit 2, 04288 Leipzig",
+   "openingHours": ""
+  },
+  {
+   "id": "node/2289720702",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.35047,
+   "lon": 12.440371,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "node/2389896457",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.301897,
+   "lon": 12.39707,
+   "address": "Zwickauer Straße 125, 04279 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/3382794726",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.357972,
+   "lon": 12.457907,
+   "address": "Waldkerbelstraße, 04329 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/3700233722",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.341892,
+   "lon": 12.379138,
+   "address": "Ritterstraße 23-25, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; PH off"
+  },
+  {
+   "id": "node/4060259591",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.272984,
+   "lon": 12.310045,
+   "address": "Rehbacher Straße 7, 04249 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00; Su,PH off"
+  },
+  {
+   "id": "way/151943882",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.336438,
+   "lon": 12.403505,
+   "address": "Täubchenweg 71, 04317 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "way/252267410",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.359588,
+   "lon": 12.474141,
+   "address": "Goldene Hufe 1, 04329 Leipzig",
+   "openingHours": "Mo-Sa 07:00-20:00"
+  },
+  {
+   "id": "way/442205644",
+   "chain": "penny",
+   "name": "PENNY",
+   "lat": 51.353361,
+   "lon": 12.422307,
+   "address": "Poserstraße 2, 04347 Leipzig",
+   "openingHours": "Mo-Sa 07:00-21:00"
+  },
+  {
+   "id": "node/26043425",
+   "chain": "rewe",
+   "name": "Rewe",
+   "lat": 51.375527,
+   "lon": 12.412408,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/1226029857",
+   "chain": "rewe",
+   "name": "Rewe",
+   "lat": 51.344398,
+   "lon": 12.382245,
+   "address": "Willy-Brandt-Platz 7, 04109 Leipzig",
+   "openingHours": "Mo-Sa 08:00-22:00; Su 12:00-18:00; PH off"
+  },
+  {
+   "id": "node/4615760742",
+   "chain": "rewe",
+   "name": "Rewe",
+   "lat": 51.320192,
+   "lon": 12.304473,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/1031882772",
+   "chain": "rewe",
+   "name": "Rewe",
+   "lat": 51.308755,
+   "lon": 12.266379,
+   "address": "An der Kotsche 9, 04207 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/252662552",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.319004,
+   "lon": 12.287747,
+   "address": "Ludwigsburger Straße 9, 04209 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; PH off"
+  },
+  {
+   "id": "node/308667745",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.348116,
+   "lon": 12.310706,
+   "address": "Georg-Schwarz-Straße 139 - 142, 04179 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/2575121788",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.340541,
+   "lon": 12.364807,
+   "address": "Elsterstraße 22",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/5793292324",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.322393,
+   "lon": 12.288382,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/11581969805",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.338084,
+   "lon": 12.375375,
+   "address": "Petersstraße 33-35, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/35818036",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.36428,
+   "lon": 12.385313,
+   "address": "",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/119238629",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.295652,
+   "lon": 12.386644,
+   "address": "Bornaische Straße 111, 04279 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/190403210",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.300352,
+   "lon": 12.433023,
+   "address": "Franzosenallee 10, 04289 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; PH off"
+  },
+  {
+   "id": "way/238524938",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.32568,
+   "lon": 12.386994,
+   "address": "Tarostraße 2, 04103 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/248962888",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.310976,
+   "lon": 12.373789,
+   "address": "Scheffelstraße 34, 04277 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/344073680",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.376925,
+   "lon": 12.402376,
+   "address": "Rosenowstraße 30b, 04357 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/404291352",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.361086,
+   "lon": 12.360534,
+   "address": "Breitenfelder Straße 1a, 04155 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "way/513608520",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.323432,
+   "lon": 12.332156,
+   "address": "Zschochersche Straße 82b, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "way/587340584",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.356066,
+   "lon": 12.416092,
+   "address": "Gorkistraße 55, 04347 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; PH off"
+  },
+  {
+   "id": "way/607442458",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.333256,
+   "lon": 12.338628,
+   "address": "Zschochersche Straße 14a, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/699750504",
+   "chain": "rewe",
+   "name": "REWE",
+   "lat": 51.345755,
+   "lon": 12.427797,
+   "address": "Leonhard-Frank-Straße 65, 04318 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "way/316089708",
+   "chain": "rewe",
+   "name": "Rewe City",
+   "lat": 51.362083,
+   "lon": 12.36843,
+   "address": "Georg-Schumann-Straße 60, 04155 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00"
+  },
+  {
+   "id": "node/3936273864",
+   "chain": "rewe",
+   "name": "REWE City",
+   "lat": 51.342673,
+   "lon": 12.373068,
+   "address": "Hainstraße 21-29, 04109 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "way/586962428",
+   "chain": "rewe",
+   "name": "REWE City",
+   "lat": 51.320055,
+   "lon": 12.329207,
+   "address": "Antonienstraße 19, 04229 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; PH closed"
+  },
+  {
+   "id": "relation/7794637",
+   "chain": "rewe",
+   "name": "REWE City",
+   "lat": 51.331013,
+   "lon": 12.405015,
+   "address": "Riebeckstraße 10, 04317 Leipzig",
+   "openingHours": "Mo-Sa 06:00-22:00"
+  },
+  {
+   "id": "node/1840708114",
+   "chain": "rewe",
+   "name": "REWE Stefan Sachsenweger OHG",
+   "lat": 51.319478,
+   "lon": 12.425244,
+   "address": "Holzhäuser Straße 110, 04299 Leipzig",
+   "openingHours": "Mo-Sa 07:00-22:00; Su,PH off"
+  },
+  {
+   "id": "node/313549117",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.337843,
+   "lon": 12.405291,
+   "address": "Dresdner Straße 78-80, 04317 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; PH off"
+  },
+  {
+   "id": "node/655367033",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.348816,
+   "lon": 12.310625,
+   "address": "Georg-Schwarz-Straße 139, 04179 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/1250248541",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.362871,
+   "lon": 12.365305,
+   "address": "Lindenthaler Straße 35-37, 04155 Leipzig",
+   "openingHours": "Mo-Fr 08:00-20:00; Sa 08:00-18:00; PH off"
+  },
+  {
+   "id": "node/1308048029",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.319928,
+   "lon": 12.289659,
+   "address": "Ludwigsburger Straße 9, 04209 Leipzig",
+   "openingHours": "Mo-Fr 09:00-20:00; Sa 09:00-20:00; PH off"
+  },
+  {
+   "id": "node/1308048074",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.337519,
+   "lon": 12.374183,
+   "address": "Petersstraße 44, 04109 Leipzig",
+   "openingHours": "Mo-Sa 09:00-20:00; PH off"
+  },
+  {
+   "id": "node/1308048107",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.329611,
+   "lon": 12.335951,
+   "address": "Zschochersche Straße 48, 04229 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/2673224074",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.374675,
+   "lon": 12.41203,
+   "address": "Mockauer Straße 119, 04357 Leipzig",
+   "openingHours": "Mo-Fr 08:30-19:00; Sa 08:30-16:00; PH off"
+  },
+  {
+   "id": "node/3583768978",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.345359,
+   "lon": 12.379652,
+   "address": "Willy-Brandt-Platz 5, 04109 Leipzig",
+   "openingHours": "Mo-Sa 08:00-21:00; Su 09:30-20:00; PH 09:30-20:00"
+  },
+  {
+   "id": "node/4544882914",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.342091,
+   "lon": 12.373418,
+   "address": "Hainstraße 17-19, 04109 Leipzig",
+   "openingHours": "Mo-Fr 09:00-20:00; Sa 09:00-20:00; PH off"
+  },
+  {
+   "id": "node/5250905591",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.36427,
+   "lon": 12.384128,
+   "address": "Delitzscher Straße 64, 04129 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; PH off"
+  },
+  {
+   "id": "node/5250905592",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.300578,
+   "lon": 12.397318,
+   "address": "Zwickauer Straße 127, 04279 Leipzig",
+   "openingHours": "Mo-Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/5250905593",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.318688,
+   "lon": 12.423885,
+   "address": "Holzhäuser Straße 102-104, 04299 Leipzig",
+   "openingHours": "Mo-Fr 08:00-20:00; Sa 08:30-20:00; PH off"
+  },
+  {
+   "id": "node/5250905594",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.304713,
+   "lon": 12.322173,
+   "address": "Bismarckstraße 22, 04249 Leipzig",
+   "openingHours": "Mo-Fr 09:00-19:30; Sa 09:00-17:00; PH off"
+  },
+  {
+   "id": "node/8044331637",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.35281,
+   "lon": 12.42278,
+   "address": "Permoserstraße 3, 04347 Leipzig",
+   "openingHours": "Mo-Fr 08:00-20:00; Sa 08:00-20:00; Su,PH off"
+  },
+  {
+   "id": "node/14228046701",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.332196,
+   "lon": 12.319981,
+   "address": "Lützner Straße 150, 04179",
+   "openingHours": "Mo-Sa 08:00-20:00"
+  },
+  {
+   "id": "way/256420525",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.34806,
+   "lon": 12.268192,
+   "address": "Miltitzer Straße 13, 04178 Leipzig",
+   "openingHours": "Mo-Fr 09:00-20:00; Sa 09:00-20:00; PH off"
+  },
+  {
+   "id": "way/730690009",
+   "chain": "rossmann",
+   "name": "Rossmann",
+   "lat": 51.330914,
+   "lon": 12.373345,
+   "address": "Karl-Liebknecht-Straße 4, 04107 Leipzig",
+   "openingHours": "Mo-Fr 08:00-20:00; Sa 08:30-18:00; PH off"
+  }
+ ]
+}

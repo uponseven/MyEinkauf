@@ -1,6 +1,6 @@
 // Export und Import des Katalogs als JSON-Datei. Eigene Fotos werden als Data-URL eingebettet.
 
-import { getAllProducts, saveProducts, getSetting, saveSetting } from './db.js';
+import { getAllProducts, saveProducts, getSetting, saveSetting, SYNCED_SETTINGS } from './db.js';
 import { queuePhotoDelete } from './sync.js';
 
 const FORMAT = 'myeinkauf-katalog';
@@ -27,14 +27,19 @@ export async function exportCatalog() {
       photo: p.photo instanceof Blob ? await blobToDataUrl(p.photo) : null,
     })),
   );
-  const categories = await getSetting('categories');
   const data = {
     format: FORMAT,
     version: FORMAT_VERSION,
     exportedAt: new Date().toISOString(),
     products: serialized,
-    ...(categories ? { categories: { list: categories.list, updatedAt: categories.updatedAt } } : {}),
   };
+  for (const key of SYNCED_SETTINGS) {
+    const setting = await getSetting(key);
+    if (setting) {
+      const { key: _, ...value } = setting;
+      data[key] = value;
+    }
+  }
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const date = new Date().toISOString().slice(0, 10);
   const a = document.createElement('a');
@@ -78,14 +83,16 @@ export async function importCatalog(file, mode = 'merge') {
     });
   }
 
-  // Eigene Kategorien: beim Ersetzen immer, beim Zusammenführen nur, wenn neuer.
-  if (Array.isArray(data.categories?.list)) {
-    const current = await getSetting('categories');
-    if (mode === 'replace' || !current || (data.categories.updatedAt || '') > (current.updatedAt || '')) {
+  // Einstellungen: beim Ersetzen immer, beim Zusammenführen nur, wenn neuer.
+  for (const key of SYNCED_SETTINGS) {
+    const value = data[key];
+    if (!value || typeof value !== 'object') continue;
+    const current = await getSetting(key);
+    if (mode === 'replace' || !current || (value.updatedAt || '') > (current.updatedAt || '')) {
       await saveSetting({
-        key: 'categories',
-        list: data.categories.list,
-        updatedAt: mode === 'replace' ? new Date().toISOString() : data.categories.updatedAt,
+        ...value,
+        key,
+        updatedAt: mode === 'replace' ? new Date().toISOString() : value.updatedAt,
       });
     }
   }

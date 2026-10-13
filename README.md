@@ -3,7 +3,7 @@
 Persönlicher Einkaufsplaner als Web-App (PWA): Katalog der Lieblingsprodukte, später Angebote,
 Märkte und optimierte Einkaufslisten. Ziele und Planung stehen in [CLAUDE.md](CLAUDE.md).
 
-## Stand: Phase 1 – Katalog
+## Stand: Phase 2 – Katalog und Märkte
 
 - Barcode scannen mit der Kamera (BarcodeDetector des Browsers, sonst ZXing) oder EAN eintippen
 - Name, Marke, Packungsgröße, Bild und Kategorievorschlag aus Open Food Facts
@@ -13,6 +13,12 @@ Märkte und optimierte Einkaufslisten. Ziele und Planung stehen in [CLAUDE.md](C
 - Daten lokal im Browser (IndexedDB), Export/Import als JSON-Datei
 - Abgleich zwischen Geräten über ein privates GitHub-Repository (siehe unten)
 - Installierbar (Homescreen-Symbol), funktioniert offline
+- Märkte: Leipziger Filialen aus OpenStreetMap auf einer Karte, Ketten filtern, Lieblingsfilialen,
+  Zuhause festlegen (Sortierung nach Entfernung), Öffnungszeiten mit „geöffnet/geschlossen“
+
+Die Filialen kommen als Schnappschuss mit (`data/maerkte-leipzig.json`), weil die Overpass-Server oft
+überlastet sind. In der App lassen sie sich live aktualisieren; den Schnappschuss erneuert
+`node tools/update-markets.mjs`.
 
 ## Lokal starten
 
@@ -37,7 +43,7 @@ npm test
 ## Abgleich zwischen PC und Handy
 
 Der Katalog wird über das private Repository `uponseven/MyEinkauf-daten` abgeglichen:
-`katalog/produkte.json` (Produkte ohne Fotos, dazu die Kategorienliste) und `fotos/<photoId>.jpg`.
+`katalog/produkte.json` (Produkte ohne Fotos, dazu Kategorien, Lieblingsfilialen, Ketten, Zuhause) und `fotos/<photoId>.jpg`.
 
 Einrichtung pro Gerät unter ⚙ → „Abgleich zwischen Geräten“ mit einem
 [Fine-grained Token](https://github.com/settings/personal-access-tokens/new):
@@ -74,8 +80,12 @@ Einstellungen → Katalog exportieren, Datei auf das andere Gerät bringen, dort
 | `js/backup.js` | Export/Import |
 | `js/ean.js` | EAN-Prüfziffer |
 | `js/sync.js` | Abgleich über GitHub-Repository |
+| `js/markets.js` | Ketten, OSM-Abruf, Öffnungszeiten, Entfernungen |
+| `js/markets-view.js` | Ansicht Märkte (Karte, Liste) |
+| `data/maerkte-leipzig.json`, `tools/update-markets.mjs` | Filial-Schnappschuss und Skript dafür |
 | `sw.js`, `manifest.webmanifest`, `icons/` | PWA (offline, installierbar) |
 | `vendor/zxing/` | ZXing-Barcode-Bibliothek 0.2.1 (Apache-2.0), lokal abgelegt |
+| `vendor/leaflet/` | Leaflet 1.9.4 (BSD-2), Kartenbibliothek |
 
 ## Datenmodell Produkt
 
@@ -94,5 +104,7 @@ Einstellungen → Katalog exportieren, Datei auf das andere Gerät bringen, dort
 
 ## Lizenzen der Daten
 
+Filialdaten und Kartenkacheln: © OpenStreetMap-Mitwirkende,
+[ODbL](https://www.openstreetmap.org/copyright).
 Produktdaten und Bilder: Open Food Facts, Open Beauty Facts und Open Products Facts unter
 [ODbL](https://opendatacommons.org/licenses/odbl/1-0/).

@@ -83,7 +83,13 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
   der ins selbe Daten-Repo schreibt (statt Raspberry Pi).
 - **Eigene Kategorien** (Version 0.3.0): anlegen, umbenennen, sortieren, löschen; werden mit abgeglichen.
   Kategorie mit „Soja/Pflanzlich/Vegan“ im Namen bekommt pflanzliche Produkte automatisch vorgeschlagen.
+- **Phase 2 (Märkte) umgesetzt** (Version 0.4.0): Filialen aus OSM als mitgelieferter Schnappschuss
+  `data/maerkte-leipzig.json` (Overpass ist oft überlastet), Live-Aktualisierung in der App, Karte (Leaflet,
+  lokal), Kettenauswahl (7 gewählte + Aldi, Netto, Norma, Rossmann zuschaltbar), Lieblingsfilialen,
+  Zuhause, Öffnungsstatus. Favoriten/Ketten/Zuhause werden mit abgeglichen.
+  Schnappschuss erneuern: `node tools/update-markets.mjs`.
 - Bei geänderter Dateiliste `APP_FILES`/`VERSION` in `sw.js` anpassen, App-Version in `js/app.js`.
 
 ## Nächster Schritt
-- Phase 2: Märkte aus OpenStreetMap (Leipzig), Karte, Lieblingsfilialen.
+- Phase 3: Angebote (Marktguru) für die gewählten Ketten/Filialen mit dem Katalog abgleichen.
+  Zuerst klären: wo läuft der Abruf (GitHub Actions?) und wie kommt er an die Daten.

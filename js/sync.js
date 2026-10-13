@@ -3,13 +3,14 @@
 // Aufbau im Daten-Repository:
 //   katalog/produkte.json   alle Produkte ohne Fotos, inkl. Lösch-Markierungen
 //   fotos/<photoId>.jpg     eigene Fotos; eine photoId wird nie wiederverwendet
-//   Kategorienliste steht mit in produkte.json (als Ganzes, neuerer Stand gewinnt).
+//   Einstellungen (Kategorien, Lieblingsfilialen, Ketten, Zuhause) stehen mit in produkte.json,
+//   jeweils als Ganzes, neuerer Stand gewinnt.
 //
 // Zusammenführen: pro Produkt gewinnt der neuere Stand (updatedAt).
 // Gelöschte Produkte bleiben als {id, deleted: true, updatedAt} erhalten,
 // damit die Löschung auf allen Geräten ankommt.
 
-import { getAllProducts, saveProducts, getSetting, saveSetting } from './db.js';
+import { getAllProducts, saveProducts, getSetting, saveSetting, SYNCED_SETTINGS } from './db.js';
 
 const CONFIG_KEY = 'myeinkauf-sync';
 const STATUS_KEY = 'myeinkauf-sync-status';
@@ -176,10 +177,10 @@ const newer = (a, b) => (a.updatedAt || '') > (b.updatedAt || '');
 const newId = () => crypto.randomUUID?.() ??
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
-function serializeCatalog(products, categories) {
+function serializeCatalog(products, settings) {
   const sorted = [...products].sort((a, b) => a.id.localeCompare(b.id)).map(stripPhoto);
   const data = { format: 'myeinkauf-sync', version: 1, products: sorted };
-  if (categories) data.categories = { list: categories.list, updatedAt: categories.updatedAt };
+  for (const [key, { key: _, ...value }] of Object.entries(settings)) data[key] = value;
   return `${JSON.stringify(data, null, 1)}\n`;
 }
 
@@ -244,13 +245,17 @@ async function syncOnce(config) {
     }
   }
 
-  // Kategorienliste: als Ganzes, neuerer Stand gewinnt.
-  let categories = await getSetting('categories');
-  const remoteCategories = remoteData.categories;
-  if (remoteCategories?.list && (!categories || newer(remoteCategories, categories))) {
-    categories = { key: 'categories', list: remoteCategories.list, updatedAt: remoteCategories.updatedAt };
-    await saveSetting(categories);
-    received++;
+  // Einstellungen (Kategorien, Lieblingsfilialen, ...): jeweils als Ganzes, neuerer Stand gewinnt.
+  const settings = {};
+  for (const key of SYNCED_SETTINGS) {
+    let setting = await getSetting(key);
+    const remote = remoteData[key];
+    if (remote?.updatedAt && (!setting || newer(remote, setting))) {
+      setting = { ...remote, key };
+      await saveSetting(setting);
+      received++;
+    }
+    if (setting) settings[key] = setting;
   }
 
   // 4. Lokal übernehmen.
@@ -258,7 +263,7 @@ async function syncOnce(config) {
 
   // 5. Katalog ins Repository schreiben, falls sich etwas geändert hat.
   //    Bei gleichzeitiger Änderung (409) wirft das und der Aufrufer versucht es erneut.
-  const mergedText = serializeCatalog([...merged.values()], categories);
+  const mergedText = serializeCatalog([...merged.values()], settings);
   let pushed = false;
   if (mergedText !== remoteText) {
     await gh(config, 'PUT', repoPath(config, CATALOG_PATH), {

@@ -2,7 +2,7 @@
 // App-Dateien kommen bei Netz immer frisch vom Server (Network First), der Cache dient nur
 // als Rückfall ohne Netz. VERSION erhöhen, wenn sich die Liste APP_FILES ändert.
 
-const VERSION = 'v0.3.0';
+const VERSION = 'v0.4.0';
 const APP_CACHE = `myeinkauf-app-${VERSION}`;
 const IMAGE_CACHE = 'myeinkauf-images';
 
@@ -17,9 +17,14 @@ const APP_FILES = [
   'js/db.js',
   'js/ean.js',
   'js/off.js',
+  'js/markets.js',
+  'js/markets-view.js',
   'js/scanner.js',
   'js/sync.js',
   'vendor/zxing/zxing-browser.min.js',
+  'vendor/leaflet/leaflet.js',
+  'vendor/leaflet/leaflet.css',
+  'data/maerkte-leipzig.json',
   'icons/icon.svg',
   'icons/icon-192.png',
   'icons/icon-512.png',
@@ -54,7 +59,8 @@ self.addEventListener('fetch', (event) => {
   // Eigene App-Dateien: zuerst Netz (und Cache auffrischen), ohne Netz aus dem Cache.
   if (url.origin === self.location.origin) {
     event.respondWith(
-      fetch(request)
+      // no-cache: beim Server nachfragen (ETag), damit nie alte und neue Dateien gemischt werden.
+      fetch(request, { cache: 'no-cache' })
         .then((response) => {
           if (response.ok) {
             const copy = response.clone();

@@ -14,6 +14,7 @@ import { lookupEan } from './off.js';
 import { startScanner, cameraSupported, describeCameraError } from './scanner.js';
 import { isValidEan, normalizeEan } from './ean.js';
 import { exportCatalog, importCatalog } from './backup.js';
+import { renderMarkets } from './markets-view.js';
 import {
   DEFAULT_REPO,
   connect,
@@ -25,7 +26,7 @@ import {
   syncNow,
 } from './sync.js';
 
-export const APP_VERSION = '0.3.0';
+export const APP_VERSION = '0.4.0';
 
 const view = document.getElementById('view');
 const NO_CATEGORY = 'Ohne Kategorie';
@@ -547,7 +548,7 @@ async function renderSettings() {
 
     <h2>Über</h2>
     <div class="card small">
-      <p style="margin-top:0">MyEinkauf ${APP_VERSION} · Phase 1: Katalog mit Abgleich</p>
+      <p style="margin-top:0">MyEinkauf ${APP_VERSION} · Phase 2: Katalog und Märkte</p>
       <p class="muted">Produktdaten und Bilder: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a>,
         Open Beauty Facts und Open Products Facts, Lizenz ODbL.
         Barcode-Erkennung: BarcodeDetector des Browsers bzw. <a href="https://github.com/zxing-js/browser" target="_blank" rel="noopener">ZXing</a>.</p>
@@ -792,6 +793,13 @@ async function route({ keepScroll = false } = {}) {
   const scrollY = window.scrollY;
 
   const path = location.hash.replace(/^#/, '') || '/';
+  const tab = path.startsWith('/maerkte') ? 'maerkte'
+    : ['/einstellungen', '/kategorien'].includes(path) ? 'einstellungen' : 'katalog';
+  document.querySelectorAll('.tabbar a').forEach((a) => {
+    a.classList.toggle('active', a.dataset.tab === tab);
+    if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
   try {
     if (path === '/') await renderCatalog();
     else if (path === '/neu') renderAdd();
@@ -801,7 +809,9 @@ async function route({ keepScroll = false } = {}) {
     } else if (path.startsWith('/produkt/')) await renderEdit(decodeURIComponent(path.slice(9)));
     else if (path === '/einstellungen') await renderSettings();
     else if (path === '/kategorien') await renderCategories();
-    else navigate('#/');
+    else if (path === '/maerkte') {
+      await renderMarkets({ view, esc, toast, scheduleSync, onCleanup: (fn) => cleanups.push(fn) });
+    } else navigate('#/');
     window.scrollTo(0, keepScroll ? scrollY : 0);
   } catch (err) {
     console.error(err);
