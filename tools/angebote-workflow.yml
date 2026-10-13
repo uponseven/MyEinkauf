@@ -51,13 +51,13 @@ jobs:
         # Der gerade geholte Stand gewinnt immer: auf den neuesten Repo-Stand setzen,
         # Datei darüberkopieren, committen. So gibt es keine Konflikte mit dem Abgleich der App.
         run: |
-          [ -f angebote/aktuell.json ] || { echo "Nichts gespeichert."; exit 0; }
-          cp angebote/aktuell.json "$RUNNER_TEMP/aktuell.json"
+          [ -d angebote ] || { echo "Nichts gespeichert."; exit 0; }
+          rm -rf "$RUNNER_TEMP/angebote" && cp -r angebote "$RUNNER_TEMP/angebote"
           git config user.name "MyEinkauf-Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for i in 1 2 3; do
             git fetch -q origin main && git reset -q --hard origin/main
-            mkdir -p angebote && cp "$RUNNER_TEMP/aktuell.json" angebote/aktuell.json
+            mkdir -p angebote && cp "$RUNNER_TEMP"/angebote/*.json angebote/
             git add angebote
             if git diff --cached --quiet; then echo "Keine Änderung."; exit 0; fi
             git commit -q -m "Angebote aktualisiert" && git push -q origin HEAD:main && exit 0
