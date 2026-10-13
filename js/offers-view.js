@@ -132,6 +132,10 @@ export async function renderOffers({ view, esc, toast, scheduleSync, rerender })
             ${unitPrice ? `<span class="muted small">(${unitPrice})</span>` : ''}
           </div>
           <div class="offer-hints">${priceHints(m, product)}</div>
+          <div class="offer-links small">
+            <a href="https://www.marktguru.de/offers/${encodeURIComponent(m.offerId)}" target="_blank" rel="noopener">Im Prospekt ↗</a>
+            ${m.retailerUrl ? `<a href="${esc(m.retailerUrl)}" target="_blank" rel="noopener">Bei ${esc(m.retailer)} ansehen ↗</a>` : ''}
+          </div>
           ${mode === 'review' ? `
             <div class="offer-for small">Für: <strong>${esc(product.name)}</strong>${product.packageSize ? ` · ${esc(product.packageSize)}` : ''}</div>
             <div class="btn-row" style="margin-top:8px">

@@ -76,6 +76,55 @@ async function zipCodeFor(home) {
   return best?.zip || FALLBACK_ZIP;
 }
 
+// ---------- Direktlinks zur Händlerseite ----------
+
+// "Bergader Bavaria Blu" → "bergader-bavaria-blu" (so baut penny.de seine Angebots-URLs)
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+// Penny-Angebote liegen unter /angebote/<rubrik>/<marke-produkt>. Die Rubrik steht nicht in den
+// Marktguru-Daten, deshalb: aktuelle Rubriken von penny.de lesen und durchprobieren.
+async function addPennyLinks(matches) {
+  const penny = matches.filter((m) => m.chain === 'penny');
+  if (!penny.length) return;
+  let categories = [];
+  try {
+    const html = await (await fetch('https://www.penny.de/angebote', { headers: { 'User-Agent': UA } })).text();
+    categories = [...new Set([...html.matchAll(/data-category-name="([a-z0-9-]+)"/g)].map((m) => m[1]))];
+  } catch (err) {
+    console.warn(`  Penny-Rubriken nicht lesbar: ${err.message}`);
+    return;
+  }
+  const found = new Map();
+  for (const m of penny) {
+    const slugs = [...new Set([slugify(`${m.brand} ${m.title}`), slugify(m.title)])].filter(Boolean);
+    const cacheKey = slugs.join('|');
+    if (!found.has(cacheKey)) {
+      let url = null;
+      search: for (const slug of slugs) {
+        for (const category of categories) {
+          const candidate = `https://www.penny.de/angebote/${category}/${slug}`;
+          const res = await fetch(candidate, { method: 'HEAD', headers: { 'User-Agent': UA } }).catch(() => null);
+          if (res?.ok) {
+            url = candidate;
+            break search;
+          }
+          await sleep(150);
+        }
+      }
+      found.set(cacheKey, url);
+      console.log(`  Penny-Link ${slugs[0]}: ${url || 'nicht gefunden'}`);
+    }
+    if (found.get(cacheKey)) m.retailerUrl = found.get(cacheKey);
+  }
+}
+
 // ---------- Ablauf ----------
 
 const catalog = await readJson(path.join(dataDir, 'katalog/produkte.json'));
@@ -125,6 +174,7 @@ if (errors.length === terms.length && terms.length) {
 
 const matches = matchOffers(products, [...offers.values()], { chains })
   .sort((a, b) => a.productId.localeCompare(b.productId) || (a.price ?? 0) - (b.price ?? 0));
+await addPennyLinks(matches);
 
 await mkdir(path.dirname(outFile), { recursive: true });
 await writeFile(outFile, `${JSON.stringify({
