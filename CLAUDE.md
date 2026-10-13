@@ -17,7 +17,8 @@ Supermärkte in meiner Stadt ab und schlägt optimierte Einkaufslisten pro Markt
 
 ## Stadt und Märkte
 - Stadt: **Leipzig** (bestätigt).
-- Ketten: **REWE, Kaufland, Penny, Lidl, Konsum (Leipzig), Edeka, dm**. Später erweiterbar.
+- Ketten: **REWE, Kaufland, Penny, Lidl, Konsum (Leipzig), Edeka, dm, Rossmann**. Später erweiterbar.
+  Rossmann und dm haben bei Marktguru für Leipzig keine Angebote (Stand 13.10.2026) – nur Filialen auf der Karte.
 
 ## Datenquellen
 | Zweck | Quelle | Hinweise |

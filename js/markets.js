@@ -12,10 +12,10 @@ export const CHAINS = [
   { key: 'konsum', name: 'Konsum', label: 'Ko', color: '#00843d', match: /^konsum\b/i, default: true },
   { key: 'edeka', name: 'Edeka', label: 'E', color: '#003f87', match: /^(edeka|e[ -]?center)\b/i, default: true },
   { key: 'dm', name: 'dm', label: 'dm', color: '#d6006e', match: /^dm\b/i, default: true },
+  { key: 'rossmann', name: 'Rossmann', label: 'Ro', color: '#c3002f', match: /^rossmann\b/i, default: true },
   { key: 'aldi', name: 'Aldi', label: 'A', color: '#00a0e0', match: /^aldi\b/i },
   { key: 'netto', name: 'Netto', label: 'N', color: '#ffd200', text: '#1d2420', match: /^netto\b/i },
   { key: 'norma', name: 'Norma', label: 'No', color: '#e30613', match: /^norma\b/i },
-  { key: 'rossmann', name: 'Rossmann', label: 'Ro', color: '#c3002f', match: /^rossmann\b/i },
 ];
 
 export const CHAIN_BY_KEY = Object.fromEntries(CHAINS.map((c) => [c.key, c]));

@@ -28,7 +28,7 @@ import {
   syncNow,
 } from './sync.js';
 
-export const APP_VERSION = '0.5.0';
+export const APP_VERSION = '0.5.1';
 
 const view = document.getElementById('view');
 const NO_CATEGORY = 'Ohne Kategorie';
