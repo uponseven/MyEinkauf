@@ -7,6 +7,7 @@ import {
   saveProduct,
   saveProducts,
   deleteProduct,
+  getSetting,
   requestPersistentStorage,
 } from './db.js';
 import { getCategories, saveCategories, guessCategory } from './categories.js';
@@ -17,6 +18,7 @@ import { exportCatalog, importCatalog } from './backup.js';
 import { renderMarkets } from './markets-view.js';
 import { renderOffers, offerBadgeCount } from './offers-view.js';
 import { searchTermFor } from './offers.js';
+import { normalPrice, typicalOfferPrice } from './pricing.js';
 import {
   DEFAULT_REPO,
   connect,
@@ -28,7 +30,7 @@ import {
   syncNow,
 } from './sync.js';
 
-export const APP_VERSION = '0.5.2';
+export const APP_VERSION = '0.6.0';
 
 const view = document.getElementById('view');
 const NO_CATEGORY = 'Ohne Kategorie';
@@ -317,6 +319,21 @@ async function renderForm(product, { isNew }) {
   let photoChanged = false;
   const imageUrl = product.imageUrl || '';
 
+  // Preisübersicht aus Open Prices und Preisgedächtnis (nur bei bestehenden Produkten).
+  let priceInfo = '';
+  if (!isNew) {
+    const [prices, history, decisionsSetting] = await Promise.all([
+      getSetting('prices-cache'), getSetting('history-cache'), getSetting('offerDecisions'),
+    ]);
+    const ctx = { prices, history: history?.entries || [], decisions: decisionsSetting?.map || {} };
+    const normal = normalPrice({ ...product, usualPrice: undefined }, ctx);
+    const typical = typicalOfferPrice(product, ctx.history, ctx.decisions);
+    const rows = [];
+    if (normal && normal.source !== 'limit') rows.push(`Normalpreis: <strong>${euro.format(normal.value)}</strong> <span class="muted">(${esc(normal.label)})</span>`);
+    if (typical) rows.push(`Üblich im Angebot: <strong>${euro.format(typical.value)}</strong> <span class="muted">(${typical.count}× in 6 Monaten)</span>`);
+    priceInfo = `<div class="price-info small">${rows.length ? rows.join('<br>') : '<span class="muted">Noch keine Preisdaten aus den letzten 6 Monaten.</span>'}</div>`;
+  }
+
   view.innerHTML = `
     <h1>${isNew ? 'Neues Produkt' : 'Produkt bearbeiten'}</h1>
     <form id="product-form" class="card" autocomplete="off" novalidate>
@@ -362,6 +379,10 @@ async function renderForm(product, { isNew }) {
           <input id="f-limit" name="priceLimit" inputmode="decimal" value="${esc(formatDecimal(product.priceLimit))}" placeholder="teurer kaufe ich nicht">
         </div>
       </div>
+
+      <label for="f-usual">Üblicher Preis <span class="hint">(€ pro Packung, optional – sonst aus Open Prices)</span></label>
+      <input id="f-usual" name="usualPrice" inputmode="decimal" value="${esc(formatDecimal(product.usualPrice))}" placeholder="z. B. 2,69">
+      ${priceInfo}
 
       <label for="f-search">Suchbegriff für Angebote <span class="hint">(leer = Marke)</span></label>
       <input id="f-search" name="searchTerm" value="${esc(product.searchTerm)}"
@@ -426,6 +447,12 @@ async function renderForm(product, { isNew }) {
       form.elements.priceLimit.focus();
       return;
     }
+    const usualPrice = parseDecimal(fd.get('usualPrice'));
+    if (Number.isNaN(usualPrice)) {
+      toast('Üblichen Preis bitte als Betrag eingeben, z. B. 2,69', { error: true });
+      form.elements.usualPrice.focus();
+      return;
+    }
     const ean = normalizeEan(fd.get('ean'));
     if (ean && !isValidEan(ean)) {
       toast('Die EAN ist ungültig', { error: true });
@@ -454,6 +481,7 @@ async function renderForm(product, { isNew }) {
       priceLimit,
       ean: ean || undefined,
       searchTerm: fd.get('searchTerm').trim() || undefined,
+      usualPrice: usualPrice ?? undefined,
       notes: fd.get('notes').trim(),
       imageUrl,
       photo,

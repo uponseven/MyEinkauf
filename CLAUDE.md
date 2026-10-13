@@ -100,8 +100,19 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
   REWE-Bio-Eigenmarken selten im Prospekt.
 - Abgleich übernimmt unbekannte Felder aus dem Repo unverändert (ältere App-Version hatte am 13.10.
   Einstellungen gelöscht).
+- **Preise** (Version 0.6.0): Normalpreis in Stufen – eigener „üblicher Preis“ → Open Prices (Median der
+  Nicht-Aktionspreise, gleiche Kette bevorzugt) → geschätzt aus typischem Angebotspreis (+25 %) → Schmerzgrenze.
+  Preisgedächtnis der Angebote in `angebote/historie.json`, Open Prices in `angebote/preise.json`.
+  **Nur die letzten 6 Monate** (Andreas' Wunsch, wegen Inflation); Älteres wird gelöscht. Marktguru liefert für
+  Supermärkte keine Streichpreise, daher kein Zurückrechnen. Abruf höchstens einmal pro Tag (deutsche Zeit).
 - Bei geänderter Dateiliste `APP_FILES`/`VERSION` in `sw.js` anpassen, App-Version in `js/app.js`.
 
 ## Nächster Schritt
-- Phase 4: Einkaufsplanung – günstigster Markt pro Produkt, Ersparnis vs. Zusatzweg (Fortbewegung pro
-  Einkauf wählbar), Route, Bring!-Anbindung.
+- Phase 4 (Plan, mit Andreas besprochen am 13.10.2026):
+  1. **Bring! lesen**: Liste über GitHub Actions holen (Login als GitHub-Secret), Einträge einmalig
+     Katalogprodukten zuordnen („Joghurt“ → Alpro Soja Natur). Noch nichts zurückschreiben.
+  2. **Optimieren**: pro Produkt „gibt es bei“ (Eigenmarken automatisch), Normalpreis/Angebot je Kette,
+     alle Kombinationen aus Lieblingsfilialen für 1, 2, 3 Märkte durchrechnen; Vergleich anzeigen
+     („2 Märkte sparen 3,30 €, 1,2 km Umweg“), Andreas wählt je nach Zeit.
+  3. **Zurückschreiben** nach Bring!: am liebsten gruppiert nach Supermarkt (eigene Liste pro Markt, falls
+     Gruppen per Artikel nicht gehen); vorher mit Testliste. Offen: Artikel verschieben oder stehen lassen.

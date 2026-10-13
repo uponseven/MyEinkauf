@@ -1,22 +1,32 @@
-// Holt aktuelle Angebote von Marktguru für die Produkte im Katalog und schreibt
-// angebote/aktuell.json ins Daten-Repository. Läuft per GitHub Actions im Repo
-// MyEinkauf-daten (siehe tools/angebote-workflow.yml), lokal zum Testen:
+// Holt aktuelle Angebote von Marktguru für die Produkte im Katalog und schreibt ins
+// Daten-Repository:
+//   angebote/aktuell.json   aktuelle Treffer
+//   angebote/historie.json  Preisgedächtnis der Treffer (letzte 6 Monate)
+//   angebote/preise.json    Normalpreise aus Open Prices (letzte 6 Monate)
+// Läuft per GitHub Actions im Repo MyEinkauf-daten (siehe tools/angebote-workflow.yml),
+// lokal zum Testen:
 //
 //   node tools/fetch-offers.mjs <pfad-zum-daten-repo> [--force]
 //
 // Marktguru ist eine inoffizielle Schnittstelle: nur privat und sparsam nutzen.
 // Ohne --force wird nicht erneut abgefragt, wenn sich die Suchbegriffe nicht geändert
-// haben und der letzte Abruf weniger als 12 Stunden zurückliegt.
+// haben und heute (deutsche Zeit) schon abgerufen wurde.
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { searchTermFor, simplifyOffer, matchOffers } from '../js/offers.js';
-import { distanceKm, DEFAULT_CHAINS } from '../js/markets.js';
+import { distanceKm, chainFor, DEFAULT_CHAINS } from '../js/markets.js';
+import { updateHistory, summarizeOpenPrices, windowStart, WINDOW_DAYS } from '../js/pricing.js';
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36';
-const REFETCH_HOURS = 12;
 const FALLBACK_ZIP = '04109';
+const berlinDate = (d) => new Date(d).toLocaleDateString('sv-SE', { timeZone: 'Europe/Berlin' });
+
+async function writeJson(file, data) {
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, `${JSON.stringify(data, null, 1)}\n`);
+}
 
 const [dataDir, ...flags] = process.argv.slice(2);
 if (!dataDir) {
@@ -144,9 +154,8 @@ const termsHash = createHash('sha256')
 
 const outFile = path.join(dataDir, 'angebote/aktuell.json');
 const previous = await readJson(outFile);
-const ageHours = previous ? (Date.now() - new Date(previous.fetchedAt)) / 3.6e6 : Infinity;
-if (!force && previous?.termsHash === termsHash && ageHours < REFETCH_HOURS) {
-  console.log(`Unverändert seit ${ageHours.toFixed(1)} h – kein neuer Abruf.`);
+if (!force && previous?.termsHash === termsHash && berlinDate(previous.fetchedAt) === berlinDate(Date.now())) {
+  console.log('Heute schon abgerufen und keine neuen Suchbegriffe – kein neuer Abruf.');
   process.exit(0);
 }
 
@@ -176,11 +185,11 @@ const matches = matchOffers(products, [...offers.values()], { chains })
   .sort((a, b) => a.productId.localeCompare(b.productId) || (a.price ?? 0) - (b.price ?? 0));
 await addPennyLinks(matches);
 
-await mkdir(path.dirname(outFile), { recursive: true });
-await writeFile(outFile, `${JSON.stringify({
+const fetchedAt = new Date().toISOString();
+await writeJson(outFile, {
   format: 'myeinkauf-angebote',
   version: 1,
-  fetchedAt: new Date().toISOString(),
+  fetchedAt,
   source: 'Marktguru (inoffiziell)',
   zipCode,
   chains,
@@ -188,5 +197,46 @@ await writeFile(outFile, `${JSON.stringify({
   termsHash,
   errors,
   matches,
-}, null, 1)}\n`);
+});
 console.log(`${matches.length} passende Angebote gespeichert.`);
+
+// ---------- Preisgedächtnis ----------
+
+const historyFile = path.join(dataDir, 'angebote/historie.json');
+const history = await readJson(historyFile, {});
+const entries = updateHistory(history.entries, matches);
+await writeJson(historyFile, {
+  format: 'myeinkauf-preishistorie',
+  version: 1,
+  updatedAt: fetchedAt,
+  windowDays: WINDOW_DAYS,
+  entries,
+});
+console.log(`Preisgedächtnis: ${entries.length} Einträge (letzte ${WINDOW_DAYS} Tage).`);
+
+// ---------- Normalpreise aus Open Prices ----------
+
+const since = windowStart().toISOString().slice(0, 10);
+const openPrices = {};
+for (const p of products.filter((x) => x.ean)) {
+  try {
+    const url = new URL('https://prices.openfoodfacts.org/api/v1/prices');
+    url.search = new URLSearchParams({ product_code: p.ean, date__gte: since, size: '100', order_by: '-date' });
+    const res = await fetch(url, { headers: { 'User-Agent': 'MyEinkauf/0.5 (privater Einkaufsplaner)' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const summary = summarizeOpenPrices((await res.json()).items, chainFor);
+    if (summary) openPrices[p.id] = summary;
+  } catch (err) {
+    console.warn(`  Open Prices ${p.name}: ${err.message}`);
+  }
+  await sleep(300);
+}
+await writeJson(path.join(dataDir, 'angebote/preise.json'), {
+  format: 'myeinkauf-normalpreise',
+  version: 1,
+  updatedAt: fetchedAt,
+  source: 'Open Prices (Open Food Facts), ODbL',
+  windowDays: WINDOW_DAYS,
+  products: openPrices,
+});
+console.log(`Open Prices: Normalpreise für ${Object.keys(openPrices).length} von ${products.length} Produkten.`);

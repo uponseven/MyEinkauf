@@ -99,6 +99,7 @@ Einstellungen → Katalog exportieren, Datei auf das andere Gerät bringen, dort
 | `js/markets-view.js` | Ansicht Märkte (Karte, Liste) |
 | `data/maerkte-leipzig.json`, `tools/update-markets.mjs` | Filial-Schnappschuss und Skript dafür |
 | `js/offers.js`, `js/offers-view.js` | Angebote zuordnen, Ansicht Angebote |
+| `js/pricing.js` | Normalpreis, Preisgedächtnis, Open Prices (letzte 6 Monate) |
 | `tools/fetch-offers.mjs`, `tools/angebote-workflow.yml` | Angebotsabruf (läuft in GitHub Actions des Daten-Repos) |
 | `sw.js`, `manifest.webmanifest`, `icons/` | PWA (offline, installierbar) |
 | `vendor/zxing/` | ZXing-Barcode-Bibliothek 0.2.1 (Apache-2.0), lokal abgelegt |

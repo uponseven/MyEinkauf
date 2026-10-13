@@ -3,6 +3,7 @@
 import { getAllProducts, getSetting, saveSetting } from './db.js';
 import { CHAIN_BY_KEY, getFavoriteMarkets, getSelectedChains, loadMarkets } from './markets.js';
 import { parsePackageSize, sizeDiffers } from './offers.js';
+import { normalPrice, typicalOfferPrice } from './pricing.js';
 import { getSyncConfig, syncNow } from './sync.js';
 
 const euro = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
@@ -13,11 +14,13 @@ const stampFmt = new Intl.DateTimeFormat('de-DE', { weekday: 'short', day: '2-di
 const COUPON_APPS = { rewe: 'REWE-App', lidl: 'Lidl Plus', penny: 'Penny-App', dm: 'dm-App', kaufland: 'Kaufland Card' };
 
 async function loadState() {
-  const [products, cache, decisionsSetting, chains] = await Promise.all([
+  const [products, cache, decisionsSetting, chains, prices, history] = await Promise.all([
     getAllProducts(),
     getSetting('offers-cache'),
     getSetting('offerDecisions'),
     getSelectedChains(),
+    getSetting('prices-cache'),
+    getSetting('history-cache'),
   ]);
   const byId = new Map(products.map((p) => [p.id, p]));
   const decisions = { ...(decisionsSetting?.map || {}) };
@@ -26,7 +29,7 @@ async function loadState() {
     byId.has(m.productId) &&
     chains.has(m.chain) &&
     (!m.validTo || new Date(m.validTo) >= now));
-  return { byId, cache, decisions, matches };
+  return { byId, cache, decisions, matches, prices, historyEntries: history?.entries || [] };
 }
 
 /** Anzahl für das Abzeichen am Reiter: zu prüfende plus bestätigte Angebote. */
@@ -53,7 +56,7 @@ export async function renderOffers({ view, esc, toast, scheduleSync, rerender })
     return;
   }
 
-  const { byId, cache, decisions, matches } = await loadState();
+  const { byId, cache, decisions, matches, prices, historyEntries } = await loadState();
 
   if (!cache) {
     view.innerHTML = `
@@ -108,6 +111,28 @@ export async function renderOffers({ view, esc, toast, scheduleSync, rerender })
       hints.push(ok
         ? `<span class="hint-good">✓ unter deiner Schmerzgrenze ${euro.format(product.priceLimit)}${note}</span>`
         : `<span class="hint-warn">über deiner Schmerzgrenze ${euro.format(product.priceLimit)}${note}</span>`);
+    }
+
+    // Vergleich mit dem Normalpreis (gleiche Packungsgröße, notfalls über den Grundpreis).
+    const own = parsePackageSize(product.packageSize);
+    const offerPack = otherSize
+      ? (own && m.referencePrice != null ? m.referencePrice * own.amount : null)
+      : (effective ?? m.price);
+    const normal = normalPrice(product, { prices, history: historyEntries, decisions, chain: m.chain });
+    if (normal?.source === 'estimate') {
+      // Aus den Angeboten selbst geschätzt: keine Ersparnis behaupten, nur als Anhaltspunkt.
+      hints.push(`<span class="muted">Normalpreis geschätzt ca. ${euro.format(normal.value)}</span>`);
+    } else if (normal && normal.source !== 'limit' && offerPack != null) {
+      const saving = normal.value - offerPack;
+      hints.push(saving > 0.05
+        ? `<span class="hint-good">spart ca. ${euro.format(saving)} ggü. Normalpreis ${euro.format(normal.value)} (${esc(normal.label)})</span>`
+        : `<span class="hint-warn">kaum günstiger als Normalpreis ${euro.format(normal.value)} (${esc(normal.label)})</span>`);
+    }
+    const typical = typicalOfferPrice(product, historyEntries, decisions);
+    if (typical?.count >= 2 && offerPack != null) {
+      hints.push(offerPack <= typical.value
+        ? `<span class="hint-good">besser als üblich im Angebot (${euro.format(typical.value)})</span>`
+        : `<span class="muted">üblich im Angebot: ${euro.format(typical.value)}</span>`);
     }
     return hints.join('');
   };

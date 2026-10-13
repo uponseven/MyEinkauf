@@ -16,7 +16,12 @@ const CONFIG_KEY = 'myeinkauf-sync';
 const STATUS_KEY = 'myeinkauf-sync-status';
 const PHOTO_DELETES_KEY = 'myeinkauf-photo-deletes';
 const CATALOG_PATH = 'katalog/produkte.json';
-const OFFERS_PATH = 'angebote/aktuell.json'; // schreibt der Abruf bei GitHub Actions, die App liest nur
+// Schreibt der Abruf bei GitHub Actions, die App liest nur: [Pfad, lokaler Zwischenspeicher]
+const FETCHED_FILES = [
+  ['angebote/aktuell.json', 'offers-cache'],
+  ['angebote/historie.json', 'history-cache'],
+  ['angebote/preise.json', 'prices-cache'],
+];
 const PHOTO_DIR = 'fotos';
 const API = 'https://api.github.com';
 
@@ -303,13 +308,15 @@ async function syncOnce(config) {
   }
   writeJson(PHOTO_DELETES_KEY, remaining);
 
-  // 7. Gefundene Angebote holen (nur lesen).
-  const offersFile = await gh(config, 'GET', repoPath(config, OFFERS_PATH));
-  if (offersFile) {
-    const offers = JSON.parse(base64ToUtf8(offersFile.content));
-    const cached = await getSetting('offers-cache');
-    if (cached?.fetchedAt !== offers.fetchedAt) {
-      await saveSetting({ ...offers, key: 'offers-cache' });
+  // 7. Ergebnisse des Abrufs holen (nur lesen): Angebote, Preisgedächtnis, Normalpreise.
+  for (const [filePath, cacheKey] of FETCHED_FILES) {
+    const file = await gh(config, 'GET', repoPath(config, filePath));
+    if (!file) continue;
+    const data = JSON.parse(base64ToUtf8(file.content));
+    const cached = await getSetting(cacheKey);
+    const stamp = data.fetchedAt || data.updatedAt;
+    if ((cached?.fetchedAt || cached?.updatedAt) !== stamp) {
+      await saveSetting({ ...data, key: cacheKey });
       received++;
     }
   }
