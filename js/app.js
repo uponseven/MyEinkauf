@@ -13,8 +13,18 @@ import { lookupEan } from './off.js';
 import { startScanner, cameraSupported, describeCameraError } from './scanner.js';
 import { isValidEan, normalizeEan } from './ean.js';
 import { exportCatalog, importCatalog } from './backup.js';
+import {
+  DEFAULT_REPO,
+  connect,
+  disconnect,
+  getSyncConfig,
+  getSyncStatus,
+  queuePhotoDelete,
+  scheduleSync,
+  syncNow,
+} from './sync.js';
 
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.2.0';
 
 const view = document.getElementById('view');
 const NO_CATEGORY = 'Ohne Kategorie';
@@ -292,6 +302,7 @@ function renderForm(product, { isNew }) {
   document.title = `${isNew ? 'Neues Produkt' : product.name} – MyEinkauf`;
   // Bearbeitungsstand des Fotos, wird erst beim Speichern übernommen.
   let photo = product.photo instanceof Blob ? product.photo : null;
+  let photoChanged = false;
   const imageUrl = product.imageUrl || '';
 
   view.innerHTML = `
@@ -372,6 +383,7 @@ function renderForm(product, { isNew }) {
     if (!file) return;
     try {
       photo = await shrinkImage(file);
+      photoChanged = true;
       renderPhoto();
     } catch (err) {
       toast(err.message, { error: true });
@@ -379,6 +391,7 @@ function renderForm(product, { isNew }) {
   });
   removeBtn.addEventListener('click', () => {
     photo = null;
+    photoChanged = true;
     renderPhoto();
   });
 
@@ -412,6 +425,8 @@ function renderForm(product, { isNew }) {
     }
 
     const now = new Date().toISOString();
+    // Jedes neue Foto bekommt eine neue ID, damit der Abgleich es eindeutig zuordnen kann.
+    const photoId = photo ? (photoChanged || !product.photoId ? newId() : product.photoId) : undefined;
     const saved = {
       ...product,
       id: product.id || newId(),
@@ -425,6 +440,7 @@ function renderForm(product, { isNew }) {
       notes: fd.get('notes').trim(),
       imageUrl,
       photo,
+      photoId,
       createdAt: product.createdAt || now,
       updatedAt: now,
     };
@@ -434,7 +450,9 @@ function renderForm(product, { isNew }) {
       toast(`Speichern fehlgeschlagen: ${err.message}`, { error: true });
       return;
     }
+    if (product.photoId && product.photoId !== photoId) queuePhotoDelete(product.photoId);
     requestPersistentStorage();
+    scheduleSync();
     draft = null;
     toast(isNew ? 'Zum Katalog hinzugefügt' : 'Gespeichert');
     navigate(isNew ? '#/neu' : '#/');
@@ -443,6 +461,8 @@ function renderForm(product, { isNew }) {
   view.querySelector('#delete')?.addEventListener('click', async () => {
     if (!confirm(`„${product.name}“ wirklich aus dem Katalog löschen?`)) return;
     await deleteProduct(product.id);
+    queuePhotoDelete(product.photoId);
+    scheduleSync();
     toast('Gelöscht');
     navigate('#/');
   });
@@ -487,6 +507,9 @@ async function renderSettings() {
     </div>
     ${storage ? `<p class="muted small">${esc(storage)}</p>` : ''}
 
+    <h2>Abgleich zwischen Geräten</h2>
+    <div class="card" id="sync-card">${renderSyncCard()}</div>
+
     <h2>Sichern und übertragen</h2>
     <div class="card">
       <p class="muted small" style="margin-top:0">Die Daten liegen nur in diesem Browser. Mit dem Export
@@ -508,11 +531,13 @@ async function renderSettings() {
 
     <h2>Über</h2>
     <div class="card small">
-      <p style="margin-top:0">MyEinkauf ${APP_VERSION} · Phase 1: Katalog</p>
+      <p style="margin-top:0">MyEinkauf ${APP_VERSION} · Phase 1: Katalog mit Abgleich</p>
       <p class="muted">Produktdaten und Bilder: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a>,
         Open Beauty Facts und Open Products Facts, Lizenz ODbL.
         Barcode-Erkennung: BarcodeDetector des Browsers bzw. <a href="https://github.com/zxing-js/browser" target="_blank" rel="noopener">ZXing</a>.</p>
     </div>`;
+
+  bindSyncCard();
 
   view.querySelector('#export').addEventListener('click', async () => {
     try {
@@ -537,6 +562,7 @@ async function renderSettings() {
     try {
       const n = await importCatalog(file, mode);
       requestPersistentStorage();
+      scheduleSync(0);
       toast(`${n} Produkte übernommen`);
       navigate('#/');
     } catch (err) {
@@ -545,12 +571,107 @@ async function renderSettings() {
   });
 }
 
+// ---------- Abgleich (Einstellungen) ----------
+
+const TOKEN_URL = 'https://github.com/settings/personal-access-tokens/new';
+const dateTime = new Intl.DateTimeFormat('de-DE', { dateStyle: 'short', timeStyle: 'short' });
+
+function syncStatusText() {
+  const st = getSyncStatus();
+  if (st.running) return 'Gleiche ab …';
+  if (st.error) return `⚠️ ${st.error}`;
+  if (st.lastSync) return `✓ Zuletzt abgeglichen: ${dateTime.format(new Date(st.lastSync))}`;
+  return 'Noch nicht abgeglichen.';
+}
+
+function renderSyncCard() {
+  const config = getSyncConfig();
+  if (config) {
+    return `
+      <p style="margin-top:0">Verbunden mit <strong>${esc(config.repo)}</strong>.
+        Änderungen werden automatisch abgeglichen.</p>
+      <p class="small" id="sync-status">${esc(syncStatusText())}</p>
+      <div class="btn-row">
+        <button class="btn primary" id="sync-now">Jetzt abgleichen</button>
+        <button class="btn danger" id="sync-disconnect">Trennen</button>
+      </div>`;
+  }
+  return `
+    <p class="muted small" style="margin-top:0">Hält den Katalog auf PC und Handy gleich. Die Daten
+      liegen in deinem privaten GitHub-Repository. Auf jedem Gerät einmal einrichten:</p>
+    <ol class="small" style="padding-left:20px">
+      <li><a href="${TOKEN_URL}" target="_blank" rel="noopener">Token bei GitHub erstellen</a>
+        (Fine-grained token):
+        <ul>
+          <li>Name z. B. „MyEinkauf“, Ablauf nach Wunsch (max. 1 Jahr)</li>
+          <li><em>Repository access:</em> „Only select repositories“ → <strong>MyEinkauf-daten</strong></li>
+          <li><em>Permissions → Repository permissions:</em> <strong>Contents: Read and write</strong></li>
+        </ul>
+      </li>
+      <li>Token kopieren und hier einfügen. Er wird nur auf diesem Gerät gespeichert.</li>
+    </ol>
+    <form id="sync-form" autocomplete="off">
+      <label for="sync-repo">Repository</label>
+      <input id="sync-repo" value="${esc(DEFAULT_REPO)}" spellcheck="false" autocapitalize="off">
+      <label for="sync-token">Token</label>
+      <input id="sync-token" type="password" placeholder="github_pat_…" spellcheck="false" autocapitalize="off">
+      <div class="btn-row">
+        <button class="btn primary" type="submit">Verbinden und abgleichen</button>
+      </div>
+    </form>`;
+}
+
+function bindSyncCard() {
+  const card = view.querySelector('#sync-card');
+  const rerender = () => {
+    card.innerHTML = renderSyncCard();
+    bindSyncCard();
+  };
+
+  const onStatus = () => {
+    const el = view.querySelector('#sync-status');
+    if (el) el.textContent = syncStatusText();
+  };
+  window.addEventListener('myeinkauf:sync-status', onStatus);
+  cleanups.push(() => window.removeEventListener('myeinkauf:sync-status', onStatus));
+
+  card.querySelector('#sync-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const button = e.submitter || card.querySelector('button[type="submit"]');
+    button.disabled = true;
+    try {
+      await connect(card.querySelector('#sync-repo').value, card.querySelector('#sync-token').value);
+      rerender();
+      const result = await syncNow();
+      toast(`Verbunden – ${result.received} Änderungen übernommen`);
+    } catch (err) {
+      toast(err.message, { error: true });
+      button.disabled = false;
+    }
+  });
+
+  card.querySelector('#sync-now')?.addEventListener('click', async () => {
+    try {
+      const result = await syncNow();
+      toast(result.received ? `${result.received} Änderungen übernommen` : 'Alles aktuell');
+    } catch (err) {
+      toast(err.message, { error: true });
+    }
+  });
+
+  card.querySelector('#sync-disconnect')?.addEventListener('click', () => {
+    if (!confirm('Abgleich auf diesem Gerät beenden? Der Katalog bleibt auf dem Gerät erhalten, der Token wird entfernt.')) return;
+    disconnect();
+    rerender();
+  });
+}
+
 // ---------- Router ----------
 
-async function route() {
+async function route({ keepScroll = false } = {}) {
   cleanups.forEach((fn) => { try { fn(); } catch { /* weiter */ } });
   cleanups = [];
-  window.scrollTo(0, 0);
+  const scrollY = window.scrollY;
 
   const path = location.hash.replace(/^#/, '') || '/';
   try {
@@ -562,6 +683,7 @@ async function route() {
     } else if (path.startsWith('/produkt/')) await renderEdit(decodeURIComponent(path.slice(9)));
     else if (path === '/einstellungen') await renderSettings();
     else navigate('#/');
+    window.scrollTo(0, keepScroll ? scrollY : 0);
   } catch (err) {
     console.error(err);
     view.innerHTML = `<div class="card"><h1>Fehler</h1><p>${esc(err.message)}</p>
@@ -571,6 +693,26 @@ async function route() {
 
 window.addEventListener('hashchange', route);
 route();
+
+// ---------- Automatischer Abgleich ----------
+
+// Nach eingehenden Änderungen Liste bzw. Einstellungen neu zeichnen, aber nie ein offenes Formular.
+window.addEventListener('myeinkauf:synced', () => {
+  const path = location.hash.replace(/^#/, '') || '/';
+  if (path === '/' || path === '/einstellungen') route({ keepScroll: true });
+});
+
+let lastAutoSync = 0;
+function autoSync() {
+  if (!getSyncConfig() || Date.now() - lastAutoSync < 30_000) return;
+  lastAutoSync = Date.now();
+  syncNow().catch((err) => console.warn('Abgleich:', err.message));
+}
+autoSync();
+window.addEventListener('online', autoSync);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') autoSync();
+});
 
 // ---------- Offline-Fähigkeit ----------
 

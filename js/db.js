@@ -43,12 +43,16 @@ async function withStore(mode, fn) {
   return result;
 }
 
-export function getAllProducts() {
-  return withStore('readonly', (s) => promisify(s.getAll()));
+// Gelöschte Produkte bleiben als Markierung {id, deleted: true, updatedAt} erhalten,
+// damit der Abgleich die Löschung an andere Geräte weitergeben kann.
+export async function getAllProducts({ includeDeleted = false } = {}) {
+  const all = await withStore('readonly', (s) => promisify(s.getAll()));
+  return includeDeleted ? all : all.filter((p) => !p.deleted);
 }
 
-export function getProduct(id) {
-  return withStore('readonly', (s) => promisify(s.get(id)));
+export async function getProduct(id) {
+  const p = await withStore('readonly', (s) => promisify(s.get(id)));
+  return p?.deleted ? undefined : p;
 }
 
 export async function findProductByEan(ean) {
@@ -61,7 +65,12 @@ export function saveProduct(product) {
 }
 
 export function deleteProduct(id) {
-  return withStore('readwrite', (s) => promisify(s.delete(id)));
+  return withStore('readwrite', async (s) => {
+    const existing = await promisify(s.get(id));
+    // photoId bleibt erhalten, damit der Abgleich das Foto im Repository entfernen kann.
+    const tombstone = { id, deleted: true, photoId: existing?.photoId, updatedAt: new Date().toISOString() };
+    return promisify(s.put(tombstone));
+  });
 }
 
 export function saveProducts(products, { replace = false } = {}) {

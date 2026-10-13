@@ -10,8 +10,8 @@ Supermärkte in meiner Stadt ab und schlägt optimierte Einkaufslisten pro Markt
 - **HTTPS ist Pflicht**, sonst gibt Android die Kamera fürs Scannen nicht frei.
   Lokal am PC testen ist ok, zum Testen am Handy über GitHub Pages veröffentlichen.
 - **Code im Git-Repository**, Hosting über GitHub Pages.
-- **Datenhaltung**: zunächst lokal im Browser (IndexedDB) mit Export/Import als JSON.
-  Sync zwischen PC und Handy kommt mit dem Hintergrunddienst (Phase 3).
+- **Datenhaltung**: lokal im Browser (IndexedDB), Export/Import als JSON, Abgleich zwischen
+  Geräten über ein privates GitHub-Repository.
 - **Sprache der Oberfläche**: Deutsch.
 - Erst einfach und lauffähig, dann ausbauen. Jede Phase soll für sich nutzbar sein.
 
@@ -73,6 +73,10 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
   Aufbau und Datenmodell: siehe README.md.
 - Lokal starten: `MyEinkauf-starten.bat` (oder `python -m http.server 8080 --bind 127.0.0.1`), Tests: `npm test`.
 - Online (GitHub Pages, Branch `main`): https://uponseven.github.io/MyEinkauf/ – Repo: https://github.com/uponseven/MyEinkauf (öffentlich). `git push` veröffentlicht Änderungen.
+- **Abgleich PC ↔ Handy** (Version 0.2.0) vorgezogen: über privates Repo
+  `uponseven/MyEinkauf-daten`, Fine-grained Token pro Gerät, neuerer Stand gewinnt, Lösch-Markierungen.
+  Annahme: nur Andreas nutzt die App. Idee für Phase 3: Angebotsabruf als GitHub-Actions-Zeitplan,
+  der ins selbe Daten-Repo schreibt (statt Raspberry Pi).
 - Bei geänderter Dateiliste `APP_FILES`/`VERSION` in `sw.js` anpassen, App-Version in `js/app.js`.
 
 ## Nächster Schritt

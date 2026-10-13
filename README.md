@@ -10,6 +10,7 @@ Märkte und optimierte Einkaufslisten. Ziele und Planung stehen in [CLAUDE.md](C
   (danach Open Beauty Facts und Open Products Facts für Drogerieartikel)
 - Eigenes Foto als Ersatz, Kategorie, übliche Menge, Schmerzgrenze, Notizen
 - Daten lokal im Browser (IndexedDB), Export/Import als JSON-Datei
+- Abgleich zwischen Geräten über ein privates GitHub-Repository (siehe unten)
 - Installierbar (Homescreen-Symbol), funktioniert offline
 
 ## Lokal starten
@@ -32,7 +33,22 @@ Tests (Node 20+):
 npm test
 ```
 
-## Am Handy testen (GitHub Pages)
+## Abgleich zwischen PC und Handy
+
+Der Katalog wird über das private Repository `uponseven/MyEinkauf-daten` abgeglichen:
+`katalog/produkte.json` (Produkte ohne Fotos) und `fotos/<photoId>.jpg`.
+
+Einrichtung pro Gerät unter ⚙ → „Abgleich zwischen Geräten“ mit einem
+[Fine-grained Token](https://github.com/settings/personal-access-tokens/new):
+nur Repository `MyEinkauf-daten`, Berechtigung *Contents: Read and write*.
+Der Token liegt nur im Browser des Geräts (localStorage).
+
+Regeln: pro Produkt gewinnt der neuere Stand (`updatedAt`). Gelöschte Produkte bleiben als
+`{id, deleted: true, photoId, updatedAt}` erhalten, damit die Löschung überall ankommt.
+Abgeglichen wird beim Öffnen, wenn die App wieder sichtbar wird, nach jeder Änderung und
+wenn das Netz zurückkommt. Ohne Netz wird lokal gespeichert und später abgeglichen.
+
+## Am Handy (GitHub Pages)
 
 Android gibt die Kamera nur über HTTPS frei. Deshalb über GitHub Pages veröffentlichen:
 
@@ -56,6 +72,7 @@ Einstellungen → Katalog exportieren, Datei auf das andere Gerät bringen, dort
 | `js/categories.js` | Kategorien und Zuordnung aus OFF-Daten |
 | `js/backup.js` | Export/Import |
 | `js/ean.js` | EAN-Prüfziffer |
+| `js/sync.js` | Abgleich über GitHub-Repository |
 | `sw.js`, `manifest.webmanifest`, `icons/` | PWA (offline, installierbar) |
 | `vendor/zxing/` | ZXing-Barcode-Bibliothek 0.2.1 (Apache-2.0), lokal abgelegt |
 
@@ -68,6 +85,8 @@ Einstellungen → Katalog exportieren, Datei auf das andere Gerät bringen, dort
   priceLimit,                           // Schmerzgrenze in € pro Packung oder null
   notes, imageUrl,                      // imageUrl von Open Food Facts
   photo,                                // eigenes Foto (Blob, im Export als Data-URL)
+  photoId,                              // ID des Fotos im Daten-Repository, neu je Foto
+  deleted,                              // true = gelöscht (Markierung für den Abgleich)
   source, sourceUrl, createdAt, updatedAt
 }
 ```

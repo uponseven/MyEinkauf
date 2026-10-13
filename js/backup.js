@@ -1,6 +1,7 @@
 // Export und Import des Katalogs als JSON-Datei. Eigene Fotos werden als Data-URL eingebettet.
 
 import { getAllProducts, saveProducts } from './db.js';
+import { queuePhotoDelete } from './sync.js';
 
 const FORMAT = 'myeinkauf-katalog';
 const FORMAT_VERSION = 1;
@@ -75,12 +76,23 @@ export async function importCatalog(file, mode = 'merge') {
     });
   }
 
+  const existing = new Map((await getAllProducts({ includeDeleted: true })).map((p) => [p.id, p]));
+
   if (mode === 'replace') {
-    await saveProducts(incoming, { replace: true });
+    // Als neueste Änderung markieren und nicht enthaltene Produkte als gelöscht kennzeichnen,
+    // damit das Ersetzen auch über den Abgleich auf anderen Geräten ankommt.
+    const now = new Date().toISOString();
+    const incomingIds = new Set(incoming.map((p) => p.id));
+    const tombstones = [...existing.values()]
+      .filter((p) => !p.deleted && !incomingIds.has(p.id))
+      .map((p) => {
+        queuePhotoDelete(p.photoId);
+        return { id: p.id, deleted: true, updatedAt: now };
+      });
+    await saveProducts([...incoming.map((p) => ({ ...p, updatedAt: now })), ...tombstones]);
     return incoming.length;
   }
 
-  const existing = new Map((await getAllProducts()).map((p) => [p.id, p]));
   const toSave = incoming.filter((p) => {
     const current = existing.get(p.id);
     return !current || (p.updatedAt || '') > (current.updatedAt || '');
