@@ -5,10 +5,11 @@ import {
   getProduct,
   findProductByEan,
   saveProduct,
+  saveProducts,
   deleteProduct,
   requestPersistentStorage,
 } from './db.js';
-import { CATEGORIES } from './categories.js';
+import { getCategories, saveCategories, guessCategory } from './categories.js';
 import { lookupEan } from './off.js';
 import { startScanner, cameraSupported, describeCameraError } from './scanner.js';
 import { isValidEan, normalizeEan } from './ean.js';
@@ -24,7 +25,7 @@ import {
   syncNow,
 } from './sync.js';
 
-export const APP_VERSION = '0.2.0';
+export const APP_VERSION = '0.3.0';
 
 const view = document.getElementById('view');
 const NO_CATEGORY = 'Ohne Kategorie';
@@ -124,8 +125,9 @@ async function renderCatalog() {
     return;
   }
 
+  const categories = await getCategories();
   const usedCategories = [...new Set(products.map((p) => p.category || NO_CATEGORY))];
-  const categoryOptions = [...CATEGORIES, NO_CATEGORY].filter((c) => usedCategories.includes(c));
+  const categoryOptions = [...categories, NO_CATEGORY].filter((c) => usedCategories.includes(c));
   if (!categoryOptions.includes(listFilter.category)) listFilter.category = '';
 
   view.innerHTML = `
@@ -155,7 +157,7 @@ async function renderCatalog() {
       list.innerHTML = '<p class="muted center">Keine Treffer.</p>';
       return;
     }
-    const order = [...CATEGORIES, NO_CATEGORY];
+    const order = [...categories, NO_CATEGORY];
     const groups = new Map();
     for (const p of filtered) {
       const key = p.category || NO_CATEGORY;
@@ -256,6 +258,10 @@ function renderAdd() {
     } catch (err) {
       toast(err.message, { error: true });
     }
+    if (data) {
+      const { categoryTags, ...rest } = data;
+      data = { ...rest, category: guessCategory(categoryTags, rest.source, await getCategories()) };
+    }
     draft = { ean, ...(data || {}) };
     navigate('#/neu/formular');
   };
@@ -298,7 +304,10 @@ function renderAdd() {
 
 // ---------- Produktformular (neu und bearbeiten) ----------
 
-function renderForm(product, { isNew }) {
+async function renderForm(product, { isNew }) {
+  const categories = await getCategories();
+  // Kategorie behalten, auch wenn sie inzwischen gelöscht wurde.
+  if (product.category && !categories.includes(product.category)) categories.push(product.category);
   document.title = `${isNew ? 'Neues Produkt' : product.name} – MyEinkauf`;
   // Bearbeitungsstand des Fotos, wird erst beim Speichern übernommen.
   let photo = product.photo instanceof Blob ? product.photo : null;
@@ -337,7 +346,7 @@ function renderForm(product, { isNew }) {
       <label for="f-category">Kategorie</label>
       <select id="f-category" name="category">
         <option value="">– bitte wählen –</option>
-        ${CATEGORIES.map((c) => `<option ${c === product.category ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+        ${categories.map((c) => `<option ${c === product.category ? 'selected' : ''}>${esc(c)}</option>`).join('')}
       </select>
 
       <div class="grid-2">
@@ -477,7 +486,7 @@ async function renderEdit(id) {
     navigate('#/');
     return;
   }
-  renderForm(product, { isNew: false });
+  await renderForm(product, { isNew: false });
 }
 
 // ---------- Einstellungen ----------
@@ -506,6 +515,13 @@ async function renderSettings() {
       <div><strong>${withPhoto}</strong><span class="muted small">mit eigenem Foto</span></div>
     </div>
     ${storage ? `<p class="muted small">${esc(storage)}</p>` : ''}
+
+    <h2>Kategorien</h2>
+    <a class="card settings-link" href="#/kategorien">
+      <span><strong>Kategorien verwalten</strong><br>
+        <span class="muted small">Eigene anlegen, umbenennen, sortieren, löschen</span></span>
+      <span aria-hidden="true">›</span>
+    </a>
 
     <h2>Abgleich zwischen Geräten</h2>
     <div class="card" id="sync-card">${renderSyncCard()}</div>
@@ -567,6 +583,108 @@ async function renderSettings() {
       navigate('#/');
     } catch (err) {
       toast(err.message, { error: true });
+    }
+  });
+}
+
+// ---------- Kategorien verwalten ----------
+
+async function renderCategories() {
+  document.title = 'Kategorien – MyEinkauf';
+  const categories = await getCategories();
+  const products = await getAllProducts();
+  const counts = new Map();
+  for (const p of products) counts.set(p.category, (counts.get(p.category) || 0) + 1);
+
+  view.innerHTML = `
+    <p class="small" style="margin:0 0 4px"><a href="#/einstellungen">‹ Einstellungen</a></p>
+    <h1>Kategorien</h1>
+    <p class="muted small">Die Reihenfolge bestimmt die Gruppierung im Katalog.
+      Eine Kategorie mit „Soja“, „Pflanzlich“ oder „Vegan“ im Namen bekommt pflanzliche
+      Produkte beim Scannen automatisch vorgeschlagen.</p>
+    <ul class="category-list">
+      ${categories.map((c, i) => `
+        <li data-index="${i}">
+          <span class="category-name">${esc(c)} <span class="muted small">(${counts.get(c) || 0})</span></span>
+          <button class="icon-btn" data-action="up" aria-label="Nach oben" ${i === 0 ? 'disabled' : ''}>↑</button>
+          <button class="icon-btn" data-action="down" aria-label="Nach unten" ${i === categories.length - 1 ? 'disabled' : ''}>↓</button>
+          <button class="icon-btn" data-action="rename" aria-label="Umbenennen">✎</button>
+          <button class="icon-btn danger" data-action="delete" aria-label="Löschen">✕</button>
+        </li>`).join('')}
+    </ul>
+    <form id="category-add" class="input-row" style="margin-top:16px" autocomplete="off">
+      <input id="category-new" placeholder="Neue Kategorie, z. B. Soja" aria-label="Neue Kategorie" maxlength="40">
+      <button class="btn primary" type="submit">Hinzufügen</button>
+    </form>`;
+
+  const exists = (name, except) =>
+    categories.some((c) => c !== except && c.toLocaleLowerCase('de') === name.toLocaleLowerCase('de'));
+
+  const commit = async (list, message) => {
+    await saveCategories(list);
+    scheduleSync();
+    if (message) toast(message);
+    await renderCategories();
+  };
+
+  // Produkte einer Kategorie umhängen (Umbenennen) oder leeren (Löschen).
+  const moveProducts = async (from, to) => {
+    const now = new Date().toISOString();
+    const affected = products
+      .filter((p) => p.category === from)
+      .map((p) => ({ ...p, category: to, updatedAt: now }));
+    if (affected.length) await saveProducts(affected);
+    return affected.length;
+  };
+
+  view.querySelector('#category-add').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = view.querySelector('#category-new').value.trim();
+    if (!name) return;
+    if (exists(name)) {
+      toast('Diese Kategorie gibt es schon', { error: true });
+      return;
+    }
+    await commit([...categories, name], `„${name}“ angelegt`);
+  });
+
+  view.querySelector('.category-list').addEventListener('click', async (e) => {
+    const button = e.target.closest('button[data-action]');
+    if (!button) return;
+    const i = Number(button.closest('li').dataset.index);
+    const name = categories[i];
+    const list = [...categories];
+    switch (button.dataset.action) {
+      case 'up':
+      case 'down': {
+        const j = button.dataset.action === 'up' ? i - 1 : i + 1;
+        [list[i], list[j]] = [list[j], list[i]];
+        await commit(list);
+        break;
+      }
+      case 'rename': {
+        const next = prompt('Neuer Name:', name)?.trim();
+        if (!next || next === name) return;
+        if (exists(next, name)) {
+          toast('Diese Kategorie gibt es schon', { error: true });
+          return;
+        }
+        list[i] = next;
+        const n = await moveProducts(name, next);
+        await commit(list, `Umbenannt${n ? ` (${n} Produkte)` : ''}`);
+        break;
+      }
+      case 'delete': {
+        const n = counts.get(name) || 0;
+        const question = n
+          ? `„${name}“ löschen? ${n} Produkte stehen danach unter „${NO_CATEGORY}“.`
+          : `„${name}“ löschen?`;
+        if (!confirm(question)) return;
+        list.splice(i, 1);
+        await moveProducts(name, '');
+        await commit(list, 'Gelöscht');
+        break;
+      }
     }
   });
 }
@@ -679,9 +797,10 @@ async function route({ keepScroll = false } = {}) {
     else if (path === '/neu') renderAdd();
     else if (path === '/neu/formular') {
       if (!draft) return navigate('#/neu');
-      renderForm({ usualQty: 1, ...draft }, { isNew: true });
+      await renderForm({ usualQty: 1, ...draft }, { isNew: true });
     } else if (path.startsWith('/produkt/')) await renderEdit(decodeURIComponent(path.slice(9)));
     else if (path === '/einstellungen') await renderSettings();
+    else if (path === '/kategorien') await renderCategories();
     else navigate('#/');
     window.scrollTo(0, keepScroll ? scrollY : 0);
   } catch (err) {
@@ -699,7 +818,7 @@ route();
 // Nach eingehenden Änderungen Liste bzw. Einstellungen neu zeichnen, aber nie ein offenes Formular.
 window.addEventListener('myeinkauf:synced', () => {
   const path = location.hash.replace(/^#/, '') || '/';
-  if (path === '/' || path === '/einstellungen') route({ keepScroll: true });
+  if (['/', '/einstellungen', '/kategorien'].includes(path)) route({ keepScroll: true });
 });
 
 let lastAutoSync = 0;

@@ -2,7 +2,7 @@
 // App-Dateien kommen bei Netz immer frisch vom Server (Network First), der Cache dient nur
 // als Rückfall ohne Netz. VERSION erhöhen, wenn sich die Liste APP_FILES ändert.
 
-const VERSION = 'v0.2.0';
+const VERSION = 'v0.3.0';
 const APP_CACHE = `myeinkauf-app-${VERSION}`;
 const IMAGE_CACHE = 'myeinkauf-images';
 

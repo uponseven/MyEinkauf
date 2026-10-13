@@ -1,8 +1,9 @@
 // Lokale Datenhaltung im Browser (IndexedDB).
 
 const DB_NAME = 'myeinkauf';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE = 'products';
+const SETTINGS = 'settings';
 
 let dbPromise;
 
@@ -16,8 +17,20 @@ function openDb() {
           const store = db.createObjectStore(STORE, { keyPath: 'id' });
           store.createIndex('ean', 'ean', { unique: false });
         }
+        // Version 2: Einstellungen, die mit abgeglichen werden (z. B. eigene Kategorien).
+        if (!db.objectStoreNames.contains(SETTINGS)) {
+          db.createObjectStore(SETTINGS, { keyPath: 'key' });
+        }
       };
-      req.onsuccess = () => resolve(req.result);
+      req.onsuccess = () => {
+        const db = req.result;
+        // Eine neuere App-Version in einem anderen Tab will die Datenbank umbauen: Platz machen.
+        db.onversionchange = () => {
+          db.close();
+          location.reload();
+        };
+        resolve(db);
+      };
       req.onerror = () => reject(req.error);
     });
   }
@@ -31,10 +44,10 @@ function promisify(req) {
   });
 }
 
-async function withStore(mode, fn) {
+async function withStore(mode, fn, storeName = STORE) {
   const db = await openDb();
-  const tx = db.transaction(STORE, mode);
-  const result = await fn(tx.objectStore(STORE));
+  const tx = db.transaction(storeName, mode);
+  const result = await fn(tx.objectStore(storeName));
   await new Promise((resolve, reject) => {
     tx.oncomplete = resolve;
     tx.onerror = () => reject(tx.error);
@@ -78,6 +91,14 @@ export function saveProducts(products, { replace = false } = {}) {
     if (replace) await promisify(s.clear());
     for (const p of products) s.put(p);
   });
+}
+
+export function getSetting(key) {
+  return withStore('readonly', (s) => promisify(s.get(key)), SETTINGS);
+}
+
+export function saveSetting(setting) {
+  return withStore('readwrite', (s) => promisify(s.put(setting)), SETTINGS);
 }
 
 // Bittet den Browser, die Daten nicht automatisch zu löschen, wenn der Speicher knapp wird.

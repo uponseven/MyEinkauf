@@ -3,12 +3,13 @@
 // Aufbau im Daten-Repository:
 //   katalog/produkte.json   alle Produkte ohne Fotos, inkl. Lösch-Markierungen
 //   fotos/<photoId>.jpg     eigene Fotos; eine photoId wird nie wiederverwendet
+//   Kategorienliste steht mit in produkte.json (als Ganzes, neuerer Stand gewinnt).
 //
 // Zusammenführen: pro Produkt gewinnt der neuere Stand (updatedAt).
 // Gelöschte Produkte bleiben als {id, deleted: true, updatedAt} erhalten,
 // damit die Löschung auf allen Geräten ankommt.
 
-import { getAllProducts, saveProducts } from './db.js';
+import { getAllProducts, saveProducts, getSetting, saveSetting } from './db.js';
 
 const CONFIG_KEY = 'myeinkauf-sync';
 const STATUS_KEY = 'myeinkauf-sync-status';
@@ -175,9 +176,11 @@ const newer = (a, b) => (a.updatedAt || '') > (b.updatedAt || '');
 const newId = () => crypto.randomUUID?.() ??
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
-function serializeCatalog(products) {
+function serializeCatalog(products, categories) {
   const sorted = [...products].sort((a, b) => a.id.localeCompare(b.id)).map(stripPhoto);
-  return `${JSON.stringify({ format: 'myeinkauf-sync', version: 1, products: sorted }, null, 1)}\n`;
+  const data = { format: 'myeinkauf-sync', version: 1, products: sorted };
+  if (categories) data.categories = { list: categories.list, updatedAt: categories.updatedAt };
+  return `${JSON.stringify(data, null, 1)}\n`;
 }
 
 async function syncOnce(config) {
@@ -186,7 +189,8 @@ async function syncOnce(config) {
   // 1. Stand im Repository und lokal holen.
   const remoteFile = await gh(config, 'GET', repoPath(config, CATALOG_PATH));
   const remoteText = remoteFile ? base64ToUtf8(remoteFile.content) : '';
-  const remoteProducts = remoteText ? JSON.parse(remoteText).products || [] : [];
+  const remoteData = remoteText ? JSON.parse(remoteText) : {};
+  const remoteProducts = remoteData.products || [];
   const local = await getAllProducts({ includeDeleted: true });
   const localById = new Map(local.map((p) => [p.id, p]));
 
@@ -240,12 +244,21 @@ async function syncOnce(config) {
     }
   }
 
+  // Kategorienliste: als Ganzes, neuerer Stand gewinnt.
+  let categories = await getSetting('categories');
+  const remoteCategories = remoteData.categories;
+  if (remoteCategories?.list && (!categories || newer(remoteCategories, categories))) {
+    categories = { key: 'categories', list: remoteCategories.list, updatedAt: remoteCategories.updatedAt };
+    await saveSetting(categories);
+    received++;
+  }
+
   // 4. Lokal übernehmen.
   if (localUpdates.length) await saveProducts(localUpdates);
 
   // 5. Katalog ins Repository schreiben, falls sich etwas geändert hat.
   //    Bei gleichzeitiger Änderung (409) wirft das und der Aufrufer versucht es erneut.
-  const mergedText = serializeCatalog([...merged.values()]);
+  const mergedText = serializeCatalog([...merged.values()], categories);
   let pushed = false;
   if (mergedText !== remoteText) {
     await gh(config, 'PUT', repoPath(config, CATALOG_PATH), {

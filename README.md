@@ -9,6 +9,7 @@ Märkte und optimierte Einkaufslisten. Ziele und Planung stehen in [CLAUDE.md](C
 - Name, Marke, Packungsgröße, Bild und Kategorievorschlag aus Open Food Facts
   (danach Open Beauty Facts und Open Products Facts für Drogerieartikel)
 - Eigenes Foto als Ersatz, Kategorie, übliche Menge, Schmerzgrenze, Notizen
+- Eigene Kategorien verwalten (⚙ → Kategorien), werden mit abgeglichen
 - Daten lokal im Browser (IndexedDB), Export/Import als JSON-Datei
 - Abgleich zwischen Geräten über ein privates GitHub-Repository (siehe unten)
 - Installierbar (Homescreen-Symbol), funktioniert offline
@@ -36,7 +37,7 @@ npm test
 ## Abgleich zwischen PC und Handy
 
 Der Katalog wird über das private Repository `uponseven/MyEinkauf-daten` abgeglichen:
-`katalog/produkte.json` (Produkte ohne Fotos) und `fotos/<photoId>.jpg`.
+`katalog/produkte.json` (Produkte ohne Fotos, dazu die Kategorienliste) und `fotos/<photoId>.jpg`.
 
 Einrichtung pro Gerät unter ⚙ → „Abgleich zwischen Geräten“ mit einem
 [Fine-grained Token](https://github.com/settings/personal-access-tokens/new):

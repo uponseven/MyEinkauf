@@ -321,3 +321,36 @@ input:focus, select:focus, textarea:focus {
 .stats { display: flex; gap: 16px; flex-wrap: wrap; }
 .stats div { flex: 1; min-width: 120px; }
 .stats strong { display: block; font-size: 1.4rem; }
+
+/* Einstellungen und Kategorien */
+.settings-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text);
+  text-decoration: none;
+}
+.settings-link:hover { border-color: var(--accent); }
+.settings-link > span:last-child { font-size: 1.6rem; color: var(--muted); }
+
+.category-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.category-list li {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 4px 4px 14px;
+  border-top: 1px solid var(--border);
+}
+.category-list li:first-child { border-top: 0; }
+.category-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.category-list .icon-btn { font: inherit; font-size: 1.05rem; }
+.category-list .icon-btn:disabled { opacity: 0.3; cursor: default; background: transparent; }
+.icon-btn.danger:hover { color: var(--danger); }

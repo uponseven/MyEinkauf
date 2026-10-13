@@ -16,7 +16,7 @@ Supermärkte in meiner Stadt ab und schlägt optimierte Einkaufslisten pro Markt
 - Erst einfach und lauffähig, dann ausbauen. Jede Phase soll für sich nutzbar sein.
 
 ## Stadt und Märkte
-- Stadt: **Leipzig** (Annahme aus dem Planungsgespräch, bitte bestätigen).
+- Stadt: **Leipzig** (bestätigt).
 - Ketten: **REWE, Kaufland, Penny, Lidl, Konsum (Leipzig), Edeka, dm**. Später erweiterbar.
 
 ## Datenquellen
@@ -60,11 +60,15 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
 5. **Preisgedächtnis** – Bezahlte Preise erfassen (abhaken oder Kassenbon), eigene Preishistorie,
    echte Schnäppchen erkennen, „Vorrat anlegen“-Hinweise.
 
+## Geklärt
+- Fortbewegung: **zu Fuß, Fahrrad und Auto** – je nach Einkauf. Phase 4 soll die Art pro Einkauf
+  wählbar machen (beeinflusst Radius und Umweg-Schwelle).
+- Nutzer: aktuell nur Andreas, **später eventuell eine zweite Person** mit eigenem Handy.
+  Dann gemeinsamer Katalog über dasselbe Daten-Repo (eigener Token); Regel „neuere Änderung gewinnt“
+  reicht, solange nicht beide gleichzeitig dasselbe Produkt bearbeiten.
+
 ## Offene Fragen
-- Fortbewegung beim Einkaufen: zu Fuß, Rad oder Auto?
-- Nutzt außer mir noch jemand die App (geteilte Daten nötig)?
-- Wo läuft der Hintergrunddienst ab Phase 3?
-- Stadt Leipzig bestätigen.
+- Wo läuft der Hintergrunddienst ab Phase 3? (Idee: GitHub Actions, siehe Stand)
 
 ## Stand
 - **Phase 1 (Katalog) umgesetzt** (Version 0.1.0, Oktober 2026): statische PWA ohne Build-Schritt
@@ -77,8 +81,9 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
   `uponseven/MyEinkauf-daten`, Fine-grained Token pro Gerät, neuerer Stand gewinnt, Lösch-Markierungen.
   Annahme: nur Andreas nutzt die App. Idee für Phase 3: Angebotsabruf als GitHub-Actions-Zeitplan,
   der ins selbe Daten-Repo schreibt (statt Raspberry Pi).
+- **Eigene Kategorien** (Version 0.3.0): anlegen, umbenennen, sortieren, löschen; werden mit abgeglichen.
+  Kategorie mit „Soja/Pflanzlich/Vegan“ im Namen bekommt pflanzliche Produkte automatisch vorgeschlagen.
 - Bei geänderter Dateiliste `APP_FILES`/`VERSION` in `sw.js` anpassen, App-Version in `js/app.js`.
 
 ## Nächster Schritt
-- Scanner am Android-Handy testen.
-- Danach Phase 2: Märkte aus OpenStreetMap.
+- Phase 2: Märkte aus OpenStreetMap (Leipzig), Karte, Lieblingsfilialen.

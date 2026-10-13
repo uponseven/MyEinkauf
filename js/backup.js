@@ -1,6 +1,6 @@
 // Export und Import des Katalogs als JSON-Datei. Eigene Fotos werden als Data-URL eingebettet.
 
-import { getAllProducts, saveProducts } from './db.js';
+import { getAllProducts, saveProducts, getSetting, saveSetting } from './db.js';
 import { queuePhotoDelete } from './sync.js';
 
 const FORMAT = 'myeinkauf-katalog';
@@ -27,11 +27,13 @@ export async function exportCatalog() {
       photo: p.photo instanceof Blob ? await blobToDataUrl(p.photo) : null,
     })),
   );
+  const categories = await getSetting('categories');
   const data = {
     format: FORMAT,
     version: FORMAT_VERSION,
     exportedAt: new Date().toISOString(),
     products: serialized,
+    ...(categories ? { categories: { list: categories.list, updatedAt: categories.updatedAt } } : {}),
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const date = new Date().toISOString().slice(0, 10);
@@ -74,6 +76,18 @@ export async function importCatalog(file, mode = 'merge') {
         ? await dataUrlToBlob(p.photo)
         : null,
     });
+  }
+
+  // Eigene Kategorien: beim Ersetzen immer, beim Zusammenführen nur, wenn neuer.
+  if (Array.isArray(data.categories?.list)) {
+    const current = await getSetting('categories');
+    if (mode === 'replace' || !current || (data.categories.updatedAt || '') > (current.updatedAt || '')) {
+      await saveSetting({
+        key: 'categories',
+        list: data.categories.list,
+        updatedAt: mode === 'replace' ? new Date().toISOString() : data.categories.updatedAt,
+      });
+    }
   }
 
   const existing = new Map((await getAllProducts({ includeDeleted: true })).map((p) => [p.id, p]));

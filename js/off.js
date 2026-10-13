@@ -1,8 +1,6 @@
 // Produktsuche per Barcode in Open Food Facts und den Schwesterdatenbanken.
 // Daten unter ODbL, siehe https://world.openfoodfacts.org/terms-of-use
 
-import { guessCategory } from './categories.js';
-
 const SOURCES = [
   { name: 'Open Food Facts', base: 'https://world.openfoodfacts.org' },
   { name: 'Open Beauty Facts', base: 'https://world.openbeautyfacts.org' },
@@ -55,7 +53,7 @@ export async function lookupEan(ean) {
       // Das ℮-Zeichen (Füllmenge geschätzt) steht oft als nachgestelltes "e" in den Daten.
       packageSize: (p.quantity || '').replace(/\s*℮\s*$|\s+e$/, '').trim(),
       imageUrl: p.image_front_url || p.image_url || '',
-      category: guessCategory(p.categories_tags, source.name),
+      categoryTags: p.categories_tags || [],
       source: source.name,
       sourceUrl: `${source.base}/product/${ean}`,
     };
