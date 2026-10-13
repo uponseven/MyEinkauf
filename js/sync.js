@@ -16,6 +16,7 @@ const CONFIG_KEY = 'myeinkauf-sync';
 const STATUS_KEY = 'myeinkauf-sync-status';
 const PHOTO_DELETES_KEY = 'myeinkauf-photo-deletes';
 const CATALOG_PATH = 'katalog/produkte.json';
+const OFFERS_PATH = 'angebote/aktuell.json'; // schreibt der Abruf bei GitHub Actions, die App liest nur
 const PHOTO_DIR = 'fotos';
 const API = 'https://api.github.com';
 
@@ -177,9 +178,11 @@ const newer = (a, b) => (a.updatedAt || '') > (b.updatedAt || '');
 const newId = () => crypto.randomUUID?.() ??
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
-function serializeCatalog(products, settings) {
+// Unbekannte Felder aus dem Repository (z. B. von einer neueren App-Version) werden
+// unverändert übernommen, damit kein Gerät Daten löscht, die es selbst nicht kennt.
+function serializeCatalog(products, settings, remoteData = {}) {
   const sorted = [...products].sort((a, b) => a.id.localeCompare(b.id)).map(stripPhoto);
-  const data = { format: 'myeinkauf-sync', version: 1, products: sorted };
+  const data = { ...remoteData, format: 'myeinkauf-sync', version: 1, products: sorted };
   for (const [key, { key: _, ...value }] of Object.entries(settings)) data[key] = value;
   return `${JSON.stringify(data, null, 1)}\n`;
 }
@@ -191,6 +194,9 @@ async function syncOnce(config) {
   const remoteFile = await gh(config, 'GET', repoPath(config, CATALOG_PATH));
   const remoteText = remoteFile ? base64ToUtf8(remoteFile.content) : '';
   const remoteData = remoteText ? JSON.parse(remoteText) : {};
+  if (remoteData.version > 1) {
+    throw new Error('Die Daten stammen von einer neueren App-Version. Bitte App neu laden.');
+  }
   const remoteProducts = remoteData.products || [];
   const local = await getAllProducts({ includeDeleted: true });
   const localById = new Map(local.map((p) => [p.id, p]));
@@ -263,7 +269,7 @@ async function syncOnce(config) {
 
   // 5. Katalog ins Repository schreiben, falls sich etwas geändert hat.
   //    Bei gleichzeitiger Änderung (409) wirft das und der Aufrufer versucht es erneut.
-  const mergedText = serializeCatalog([...merged.values()], settings);
+  const mergedText = serializeCatalog([...merged.values()], settings, remoteData);
   let pushed = false;
   if (mergedText !== remoteText) {
     await gh(config, 'PUT', repoPath(config, CATALOG_PATH), {
@@ -296,6 +302,17 @@ async function syncOnce(config) {
     }
   }
   writeJson(PHOTO_DELETES_KEY, remaining);
+
+  // 7. Gefundene Angebote holen (nur lesen).
+  const offersFile = await gh(config, 'GET', repoPath(config, OFFERS_PATH));
+  if (offersFile) {
+    const offers = JSON.parse(base64ToUtf8(offersFile.content));
+    const cached = await getSetting('offers-cache');
+    if (cached?.fetchedAt !== offers.fetchedAt) {
+      await saveSetting({ ...offers, key: 'offers-cache' });
+      received++;
+    }
+  }
 
   return { received, pushed };
 }

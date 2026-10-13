@@ -1,0 +1,60 @@
+# Vorlage für .github/workflows/angebote.yml im privaten Repo MyEinkauf-daten.
+# Sucht täglich und nach jeder Katalogänderung Angebote für die Katalogprodukte.
+name: Angebote suchen
+
+on:
+  schedule:
+    - cron: '15 4 * * *' # täglich 06:15 Sommerzeit / 05:15 Winterzeit
+  push:
+    branches: [main]
+    paths: ['katalog/produkte.json']
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Auch ohne Änderung neu abfragen'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: angebote
+  cancel-in-progress: true
+
+jobs:
+  suchen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Daten auschecken
+        uses: actions/checkout@v4
+        with:
+          path: daten
+
+      - name: App-Code auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: uponseven/MyEinkauf
+          path: app
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Angebote holen
+        run: node app/tools/fetch-offers.mjs daten ${{ (github.event_name == 'workflow_dispatch' && inputs.force) && '--force' || '' }}
+
+      - name: Speichern
+        working-directory: daten
+        run: |
+          git config user.name "MyEinkauf-Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add angebote
+          if git diff --cached --quiet; then echo "Keine Änderung."; exit 0; fi
+          git commit -m "Angebote aktualisiert"
+          for i in 1 2 3; do
+            git pull --rebase && git push && exit 0
+            sleep 5
+          done
+          exit 1

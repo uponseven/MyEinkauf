@@ -95,7 +95,7 @@ export function saveProducts(products, { replace = false } = {}) {
 
 // Einstellungen, die zwischen Geräten abgeglichen und mit exportiert werden.
 // Jede wird als Ganzes behandelt: der neuere Stand (updatedAt) gewinnt.
-export const SYNCED_SETTINGS = ['categories', 'favoriteMarkets', 'chains', 'home'];
+export const SYNCED_SETTINGS = ['categories', 'favoriteMarkets', 'chains', 'home', 'offerDecisions'];
 
 export function getSetting(key) {
   return withStore('readonly', (s) => promisify(s.get(key)), SETTINGS);

@@ -15,6 +15,8 @@ import { startScanner, cameraSupported, describeCameraError } from './scanner.js
 import { isValidEan, normalizeEan } from './ean.js';
 import { exportCatalog, importCatalog } from './backup.js';
 import { renderMarkets } from './markets-view.js';
+import { renderOffers, offerBadgeCount } from './offers-view.js';
+import { searchTermFor } from './offers.js';
 import {
   DEFAULT_REPO,
   connect,
@@ -26,7 +28,7 @@ import {
   syncNow,
 } from './sync.js';
 
-export const APP_VERSION = '0.4.0';
+export const APP_VERSION = '0.5.0';
 
 const view = document.getElementById('view');
 const NO_CATEGORY = 'Ohne Kategorie';
@@ -361,6 +363,10 @@ async function renderForm(product, { isNew }) {
         </div>
       </div>
 
+      <label for="f-search">Suchbegriff für Angebote <span class="hint">(leer = Marke)</span></label>
+      <input id="f-search" name="searchTerm" value="${esc(product.searchTerm)}"
+        placeholder="${esc(searchTermFor({ ...product, searchTerm: '' }) || 'z. B. Bavaria Blu')}">
+
       <label for="f-ean">EAN / Barcode</label>
       <input id="f-ean" name="ean" inputmode="numeric" value="${esc(product.ean)}">
 
@@ -447,6 +453,7 @@ async function renderForm(product, { isNew }) {
       usualQty: Math.max(1, parseInt(fd.get('usualQty'), 10) || 1),
       priceLimit,
       ean: ean || undefined,
+      searchTerm: fd.get('searchTerm').trim() || undefined,
       notes: fd.get('notes').trim(),
       imageUrl,
       photo,
@@ -548,7 +555,7 @@ async function renderSettings() {
 
     <h2>Über</h2>
     <div class="card small">
-      <p style="margin-top:0">MyEinkauf ${APP_VERSION} · Phase 2: Katalog und Märkte</p>
+      <p style="margin-top:0">MyEinkauf ${APP_VERSION} · Phase 3: Katalog, Märkte, Angebote</p>
       <p class="muted">Produktdaten und Bilder: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a>,
         Open Beauty Facts und Open Products Facts, Lizenz ODbL.
         Barcode-Erkennung: BarcodeDetector des Browsers bzw. <a href="https://github.com/zxing-js/browser" target="_blank" rel="noopener">ZXing</a>.</p>
@@ -794,6 +801,7 @@ async function route({ keepScroll = false } = {}) {
 
   const path = location.hash.replace(/^#/, '') || '/';
   const tab = path.startsWith('/maerkte') ? 'maerkte'
+    : path === '/angebote' ? 'angebote'
     : ['/einstellungen', '/kategorien'].includes(path) ? 'einstellungen' : 'katalog';
   document.querySelectorAll('.tabbar a').forEach((a) => {
     a.classList.toggle('active', a.dataset.tab === tab);
@@ -811,12 +819,27 @@ async function route({ keepScroll = false } = {}) {
     else if (path === '/kategorien') await renderCategories();
     else if (path === '/maerkte') {
       await renderMarkets({ view, esc, toast, scheduleSync, onCleanup: (fn) => cleanups.push(fn) });
+    } else if (path === '/angebote') {
+      await renderOffers({ view, esc, toast, scheduleSync, rerender: () => route({ keepScroll: true }) });
     } else navigate('#/');
     window.scrollTo(0, keepScroll ? scrollY : 0);
+    updateOfferBadge();
   } catch (err) {
     console.error(err);
     view.innerHTML = `<div class="card"><h1>Fehler</h1><p>${esc(err.message)}</p>
       <a class="btn" href="#/">Zum Katalog</a></div>`;
+  }
+}
+
+async function updateOfferBadge() {
+  const el = document.querySelector('.tabbar [data-tab="angebote"] .badge');
+  if (!el) return;
+  try {
+    const n = await offerBadgeCount();
+    el.textContent = n > 99 ? '99+' : String(n);
+    el.hidden = n === 0;
+  } catch {
+    el.hidden = true;
   }
 }
 
@@ -828,7 +851,8 @@ route();
 // Nach eingehenden Änderungen Liste bzw. Einstellungen neu zeichnen, aber nie ein offenes Formular.
 window.addEventListener('myeinkauf:synced', () => {
   const path = location.hash.replace(/^#/, '') || '/';
-  if (['/', '/einstellungen', '/kategorien'].includes(path)) route({ keepScroll: true });
+  if (['/', '/einstellungen', '/kategorien', '/angebote'].includes(path)) route({ keepScroll: true });
+  else updateOfferBadge();
 });
 
 let lastAutoSync = 0;

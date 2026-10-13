@@ -68,7 +68,7 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
   reicht, solange nicht beide gleichzeitig dasselbe Produkt bearbeiten.
 
 ## Offene Fragen
-- Wo läuft der Hintergrunddienst ab Phase 3? (Idee: GitHub Actions, siehe Stand)
+- Bring!-Anbindung: inoffizielle Schnittstelle braucht Login – wo wird er sicher hinterlegt (GitHub-Secret?)
 
 ## Stand
 - **Phase 1 (Katalog) umgesetzt** (Version 0.1.0, Oktober 2026): statische PWA ohne Build-Schritt
@@ -88,8 +88,19 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
   lokal), Kettenauswahl (7 gewählte + Aldi, Netto, Norma, Rossmann zuschaltbar), Lieblingsfilialen,
   Zuhause, Öffnungsstatus. Favoriten/Ketten/Zuhause werden mit abgeglichen.
   Schnappschuss erneuern: `node tools/update-markets.mjs`.
+- **Phase 3 (Angebote) umgesetzt** (Version 0.5.0): GitHub Actions im Daten-Repo
+  (`.github/workflows/angebote.yml`, Vorlage `tools/angebote-workflow.yml`) läuft täglich 06:15 und nach jeder
+  Katalogänderung, holt per `tools/fetch-offers.mjs` Marktguru-Angebote (Suchbegriff = eigener Suchbegriff
+  oder Marke), gleicht mit dem Katalog ab (`js/offers.js`) und schreibt `angebote/aktuell.json`.
+  Marktguru erlaubt kein CORS → Abruf nur serverseitig. App: Reiter „Angebote“, Treffer bestätigen/verwerfen
+  (Entscheidungen werden abgeglichen), Grundpreis-Vergleich, REWE-Bonus, Schmerzgrenze, Coupon-Hinweis.
+  Benachrichtigung: nur in der App (Abzeichen). Alle gewählten Ketten zählen.
+  Erkenntnisse: Edeka Leipzig fehlt bei Marktguru (nur „EDEKA Foodservice“), dm/Konsum kaum vertreten,
+  REWE-Bio-Eigenmarken selten im Prospekt.
+- Abgleich übernimmt unbekannte Felder aus dem Repo unverändert (ältere App-Version hatte am 13.10.
+  Einstellungen gelöscht).
 - Bei geänderter Dateiliste `APP_FILES`/`VERSION` in `sw.js` anpassen, App-Version in `js/app.js`.
 
 ## Nächster Schritt
-- Phase 3: Angebote (Marktguru) für die gewählten Ketten/Filialen mit dem Katalog abgleichen.
-  Zuerst klären: wo läuft der Abruf (GitHub Actions?) und wie kommt er an die Daten.
+- Phase 4: Einkaufsplanung – günstigster Markt pro Produkt, Ersparnis vs. Zusatzweg (Fortbewegung pro
+  Einkauf wählbar), Route, Bring!-Anbindung.

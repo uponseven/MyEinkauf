@@ -481,3 +481,60 @@ main { padding-bottom: calc(var(--tabbar-h) + 96px + env(safe-area-inset-bottom)
 .closed { color: var(--danger); }
 .icon-btn.star { font-size: 1.4rem; }
 .icon-btn.star.on { color: #e0a800; }
+
+/* Angebote */
+.tab-icon { position: relative; display: inline-grid; }
+.tabbar a.active .tab-icon svg { background: var(--accent-soft); border-radius: 999px; padding: 2px 14px; box-sizing: content-box; }
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+.tabbar a.active .badge { right: 2px; }
+
+.offer-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.offer {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.offer-img {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+.offer-img.placeholder { display: grid; place-items: center; font-size: 1.6rem; background: var(--accent-soft); }
+.offer-body { flex: 1; min-width: 0; }
+.offer-head { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.offer-head .muted { margin-left: auto; }
+.fav-mark { color: #e0a800; }
+.offer-title { font-weight: 600; margin-top: 4px; }
+.offer-desc { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.offer-price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.offer-price strong { font-size: 1.25rem; color: var(--accent); }
+.offer-hints { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 4px; font-size: 0.82rem; }
+.hint-good { color: var(--accent); }
+.hint-warn { color: #b26a00; }
+@media (prefers-color-scheme: dark) { .hint-warn { color: #f0b45a; } }
+.offer-for { margin-top: 6px; }
+.coupon-hint { margin-top: 16px; }
+.rejected { margin-top: 20px; }
+.rejected summary { cursor: pointer; padding: 4px 0; }
+.rejected .offer { opacity: 0.7; }

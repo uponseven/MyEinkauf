@@ -3,7 +3,7 @@
 Persönlicher Einkaufsplaner als Web-App (PWA): Katalog der Lieblingsprodukte, später Angebote,
 Märkte und optimierte Einkaufslisten. Ziele und Planung stehen in [CLAUDE.md](CLAUDE.md).
 
-## Stand: Phase 2 – Katalog und Märkte
+## Stand: Phase 3 – Katalog, Märkte, Angebote
 
 - Barcode scannen mit der Kamera (BarcodeDetector des Browsers, sonst ZXing) oder EAN eintippen
 - Name, Marke, Packungsgröße, Bild und Kategorievorschlag aus Open Food Facts
@@ -15,6 +15,9 @@ Märkte und optimierte Einkaufslisten. Ziele und Planung stehen in [CLAUDE.md](C
 - Installierbar (Homescreen-Symbol), funktioniert offline
 - Märkte: Leipziger Filialen aus OpenStreetMap auf einer Karte, Ketten filtern, Lieblingsfilialen,
   Zuhause festlegen (Sortierung nach Entfernung), Öffnungszeiten mit „geöffnet/geschlossen“
+
+- Angebote: täglich und nach jeder Katalogänderung sucht GitHub Actions im Daten-Repo bei Marktguru nach
+  Angeboten für die Katalogprodukte. In der App bestätigst du Treffer einmal („passt / passt nicht“).
 
 Die Filialen kommen als Schnappschuss mit (`data/maerkte-leipzig.json`), weil die Overpass-Server oft
 überlastet sind. In der App lassen sie sich live aktualisieren; den Schnappschuss erneuert
@@ -55,6 +58,18 @@ Regeln: pro Produkt gewinnt der neuere Stand (`updatedAt`). Gelöschte Produkte 
 Abgeglichen wird beim Öffnen, wenn die App wieder sichtbar wird, nach jeder Änderung und
 wenn das Netz zurückkommt. Ohne Netz wird lokal gespeichert und später abgeglichen.
 
+## Angebotsabruf
+
+Der Workflow `.github/workflows/angebote.yml` im Daten-Repo (Vorlage: `tools/angebote-workflow.yml`) checkt
+dieses Repo aus und startet `tools/fetch-offers.mjs`. Lokal testen:
+
+```bash
+node tools/fetch-offers.mjs <pfad-zum-daten-repo> --force
+```
+
+Marktguru ist eine inoffizielle Schnittstelle (nur privat, sparsam: ein Suchbegriff pro Marke, 1,5 s Pause,
+kein erneuter Abruf innerhalb von 12 h ohne Katalogänderung).
+
 ## Am Handy (GitHub Pages)
 
 Android gibt die Kamera nur über HTTPS frei. Deshalb über GitHub Pages veröffentlichen:
@@ -83,6 +98,8 @@ Einstellungen → Katalog exportieren, Datei auf das andere Gerät bringen, dort
 | `js/markets.js` | Ketten, OSM-Abruf, Öffnungszeiten, Entfernungen |
 | `js/markets-view.js` | Ansicht Märkte (Karte, Liste) |
 | `data/maerkte-leipzig.json`, `tools/update-markets.mjs` | Filial-Schnappschuss und Skript dafür |
+| `js/offers.js`, `js/offers-view.js` | Angebote zuordnen, Ansicht Angebote |
+| `tools/fetch-offers.mjs`, `tools/angebote-workflow.yml` | Angebotsabruf (läuft in GitHub Actions des Daten-Repos) |
 | `sw.js`, `manifest.webmanifest`, `icons/` | PWA (offline, installierbar) |
 | `vendor/zxing/` | ZXing-Barcode-Bibliothek 0.2.1 (Apache-2.0), lokal abgelegt |
 | `vendor/leaflet/` | Leaflet 1.9.4 (BSD-2), Kartenbibliothek |
