@@ -14,7 +14,10 @@ Märkte und optimierte Einkaufslisten. Ziele und Planung stehen in [CLAUDE.md](C
 
 ## Lokal starten
 
-Kein Build-Schritt nötig, nur ein statischer Webserver:
+Am einfachsten per Doppelklick auf **`MyEinkauf-starten.bat`** (braucht Python). Das startet den
+Server und öffnet den Browser; Fenster schließen beendet ihn.
+
+Oder von Hand – kein Build-Schritt nötig, nur ein statischer Webserver:
 
 ```bash
 python -m http.server 8080 --bind 127.0.0.1
