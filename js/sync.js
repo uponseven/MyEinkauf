@@ -21,6 +21,7 @@ const FETCHED_FILES = [
   ['angebote/aktuell.json', 'offers-cache'],
   ['angebote/historie.json', 'history-cache'],
   ['angebote/preise.json', 'prices-cache'],
+  ['bring/liste.json', 'bring-cache'],
 ];
 const PHOTO_DIR = 'fotos';
 const API = 'https://api.github.com';
@@ -169,6 +170,30 @@ export async function connect(repo, token) {
   writeJson(CONFIG_KEY, config);
   setStatus({ error: null });
   return config;
+}
+
+/**
+ * Schreibt eine kleine JSON-Datei ins Daten-Repository, z. B. eine Anfrage an einen
+ * GitHub-Actions-Ablauf (bring/anfrage.json). Überschreibt den bisherigen Inhalt.
+ */
+export async function writeRepoFile(filePath, data, message) {
+  const config = getSyncConfig();
+  if (!config) throw new Error('Abgleich ist auf diesem Gerät nicht eingerichtet.');
+  for (let attempt = 1; ; attempt++) {
+    const current = await gh(config, 'GET', repoPath(config, filePath));
+    try {
+      await gh(config, 'PUT', repoPath(config, filePath), {
+        body: {
+          message: `${message} (${deviceLabel()})`,
+          content: utf8ToBase64(`${JSON.stringify(data, null, 1)}\n`),
+          ...(current ? { sha: current.sha } : {}),
+        },
+      });
+      return;
+    } catch (err) {
+      if (!(err instanceof GitHubError && err.status === 409) || attempt >= 3) throw err;
+    }
+  }
 }
 
 export function disconnect() {

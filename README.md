@@ -100,6 +100,8 @@ Einstellungen → Katalog exportieren, Datei auf das andere Gerät bringen, dort
 | `data/maerkte-leipzig.json`, `tools/update-markets.mjs` | Filial-Schnappschuss und Skript dafür |
 | `js/offers.js`, `js/offers-view.js` | Angebote zuordnen, Ansicht Angebote |
 | `js/pricing.js` | Normalpreis, Preisgedächtnis, Open Prices (letzte 6 Monate) |
+| `js/bring.js`, `js/einkauf-view.js` | Bring!-Liste lesen und zuordnen, Ansicht Einkauf |
+| `tools/fetch-bring.mjs`, `tools/bring-workflow.yml` | Bring!-Abruf (GitHub Actions im Daten-Repo, Secrets BRING_EMAIL/BRING_PASSWORD) |
 | `tools/fetch-offers.mjs`, `tools/angebote-workflow.yml` | Angebotsabruf (läuft in GitHub Actions des Daten-Repos) |
 | `sw.js`, `manifest.webmanifest`, `icons/` | PWA (offline, installierbar) |
 | `vendor/zxing/` | ZXing-Barcode-Bibliothek 0.2.1 (Apache-2.0), lokal abgelegt |

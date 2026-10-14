@@ -2,7 +2,7 @@
 // Reine Funktionen: laufen in der App und im Abruf-Skript (GitHub Actions).
 // Es zählen nur die letzten 6 Monate, damit Preissteigerungen schnell durchschlagen.
 
-import { parsePackageSize } from './offers.js';
+import { parsePackageSize, sizeDiffers } from './offers.js';
 
 export const WINDOW_DAYS = 183;
 // Angebote liegen meist 20–40 % unter dem Normalpreis; für die Schätzung angenommen: 20 % Rabatt.
@@ -102,6 +102,22 @@ export function summarizeOpenPrices(items = [], chainFor = () => null, now = new
     latest: rows.map((r) => r.date).sort().at(-1),
     byChain: Object.fromEntries(Object.entries(byChain).map(([c, list]) => [c, { median: median(list), count: list.length }])),
   };
+}
+
+/**
+ * Was kostet die eigene Packung bei diesem Angebot? REWE Bonus wird abgezogen; weicht die
+ * Angebotsgröße ab, wird über den Grundpreis umgerechnet. null, wenn das nicht geht.
+ */
+export function offerPackPrice(product, offer) {
+  if (offer.price == null) return null;
+  if (sizeDiffers(product, offer)) {
+    const own = parsePackageSize(product.packageSize);
+    if (!own || offer.referencePrice == null) return null;
+    const perPack = offer.referencePrice * own.amount;
+    const bonusShare = offer.reweBonus && offer.volume ? (offer.reweBonus / offer.volume) * own.amount : 0;
+    return Math.round((perPack - bonusShare) * 100) / 100;
+  }
+  return Math.round((offer.price - (offer.reweBonus || 0)) * 100) / 100;
 }
 
 // ---------- Normalpreis ----------

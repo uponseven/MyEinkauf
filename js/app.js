@@ -17,6 +17,7 @@ import { isValidEan, normalizeEan } from './ean.js';
 import { exportCatalog, importCatalog } from './backup.js';
 import { renderMarkets } from './markets-view.js';
 import { renderOffers, offerBadgeCount } from './offers-view.js';
+import { renderEinkauf } from './einkauf-view.js';
 import { searchTermFor } from './offers.js';
 import { normalPrice, typicalOfferPrice } from './pricing.js';
 import {
@@ -30,7 +31,7 @@ import {
   syncNow,
 } from './sync.js';
 
-export const APP_VERSION = '0.6.0';
+export const APP_VERSION = '0.7.0';
 
 const view = document.getElementById('view');
 const NO_CATEGORY = 'Ohne Kategorie';
@@ -822,7 +823,15 @@ function bindSyncCard() {
 
 // ---------- Router ----------
 
-async function route({ keepScroll = false } = {}) {
+// Ansichten nacheinander zeichnen: sonst kann eine langsame, ältere Ansicht (z. B. nach einem
+// Abgleich) die neue überschreiben, wenn man gerade den Reiter wechselt.
+let routeChain = Promise.resolve();
+function route(options) {
+  routeChain = routeChain.then(() => renderRoute(options)).catch((err) => console.error(err));
+  return routeChain;
+}
+
+async function renderRoute({ keepScroll = false } = {}) {
   cleanups.forEach((fn) => { try { fn(); } catch { /* weiter */ } });
   cleanups = [];
   const scrollY = window.scrollY;
@@ -830,6 +839,7 @@ async function route({ keepScroll = false } = {}) {
   const path = location.hash.replace(/^#/, '') || '/';
   const tab = path.startsWith('/maerkte') ? 'maerkte'
     : path === '/angebote' ? 'angebote'
+    : path === '/einkauf' ? 'einkauf'
     : ['/einstellungen', '/kategorien'].includes(path) ? 'einstellungen' : 'katalog';
   document.querySelectorAll('.tabbar a').forEach((a) => {
     a.classList.toggle('active', a.dataset.tab === tab);
@@ -847,6 +857,12 @@ async function route({ keepScroll = false } = {}) {
     else if (path === '/kategorien') await renderCategories();
     else if (path === '/maerkte') {
       await renderMarkets({ view, esc, toast, scheduleSync, onCleanup: (fn) => cleanups.push(fn) });
+    } else if (path === '/einkauf') {
+      await renderEinkauf({
+        view, esc, toast, scheduleSync,
+        rerender: () => route({ keepScroll: true }),
+        onCleanup: (fn) => cleanups.push(fn),
+      });
     } else if (path === '/angebote') {
       await renderOffers({ view, esc, toast, scheduleSync, rerender: () => route({ keepScroll: true }) });
     } else navigate('#/');

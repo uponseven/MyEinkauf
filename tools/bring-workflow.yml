@@ -1,0 +1,60 @@
+# Vorlage für .github/workflows/bring.yml im privaten Repo MyEinkauf-daten.
+# Liest die Bring!-Liste, wenn die App eine Anfrage nach bring/anfrage.json schreibt.
+# Benötigt die Secrets BRING_EMAIL und BRING_PASSWORD (Settings → Secrets → Actions).
+name: Bring!-Liste lesen
+
+on:
+  push:
+    branches: [main]
+    paths: ['bring/anfrage.json']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bring
+  cancel-in-progress: false
+
+jobs:
+  lesen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Daten auschecken
+        uses: actions/checkout@v4
+        with:
+          path: daten
+
+      - name: App-Code auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: uponseven/MyEinkauf
+          path: app
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Bring!-Liste holen
+        env:
+          BRING_EMAIL: ${{ secrets.BRING_EMAIL }}
+          BRING_PASSWORD: ${{ secrets.BRING_PASSWORD }}
+        run: node app/tools/fetch-bring.mjs daten
+
+      - name: Speichern
+        working-directory: daten
+        run: |
+          [ -f bring/liste.json ] || { echo "Nichts gespeichert."; exit 0; }
+          cp bring/liste.json "$RUNNER_TEMP/liste.json"
+          git config user.name "MyEinkauf-Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            mkdir -p bring && cp "$RUNNER_TEMP/liste.json" bring/liste.json
+            git add bring/liste.json
+            if git diff --cached --quiet; then echo "Keine Änderung."; exit 0; fi
+            git commit -q -m "Bring!-Liste gelesen" && git push -q origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1

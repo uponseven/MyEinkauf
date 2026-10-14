@@ -65,3 +65,12 @@ test('Normalpreis: eigene Angabe > Open Prices (Kette) > Schätzung > Schmerzgre
   assert.equal(normalPrice({ ...bavaria, priceLimit: 2.49 }, {}).source, 'limit');
   assert.equal(normalPrice(bavaria, {}), null);
 });
+
+test('Angebotspreis für die eigene Packung', async () => {
+  const { offerPackPrice } = await import('../js/pricing.js');
+  // 300-g-Angebot für die 175-g-Packung: 11,10 €/kg × 0,175
+  assert.equal(offerPackPrice(bavaria, { price: 3.33, referencePrice: 11.1, unit: 'kg', volume: 0.3 }), 1.94);
+  // gleiche Größe, REWE Bonus abgezogen
+  assert.equal(offerPackPrice(bavaria, { price: 2.29, referencePrice: 13.09, unit: 'kg', volume: 0.175, reweBonus: 0.2 }), 2.09);
+  assert.equal(offerPackPrice(bavaria, { price: null }), null);
+});

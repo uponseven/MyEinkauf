@@ -105,6 +105,11 @@ Vorbild für die Kombination mehrerer Quellen: Open-Source-Projekt „Korbunio�
   Preisgedächtnis der Angebote in `angebote/historie.json`, Open Prices in `angebote/preise.json`.
   **Nur die letzten 6 Monate** (Andreas' Wunsch, wegen Inflation); Älteres wird gelöscht. Marktguru liefert für
   Supermärkte keine Streichpreise, daher kein Zurückrechnen. Abruf höchstens einmal pro Tag (deutsche Zeit).
+- **Phase 4, Schritt 1 (Bring! lesen)** (Version 0.7.0): Reiter „Einkauf“. Die App schreibt `bring/anfrage.json`
+  ins Daten-Repo → Workflow `bring.yml` (Vorlage `tools/bring-workflow.yml`) liest mit `tools/fetch-bring.mjs`
+  die Liste (Secrets BRING_EMAIL/BRING_PASSWORD, legt Andreas selbst an) → `bring/liste.json`. Zuordnung
+  Bring!-Eintrag → Katalogprodukt als Einstellung `bringMapping` (abgeglichen); mit Beschreibung gilt sie nur
+  für Name+Beschreibung. Noch kein Zurückschreiben nach Bring!.
 - Bei geänderter Dateiliste `APP_FILES`/`VERSION` in `sw.js` anpassen, App-Version in `js/app.js`.
 
 ## Nächster Schritt
